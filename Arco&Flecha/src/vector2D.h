@@ -17,12 +17,23 @@ public:
 
 	// Coordenadas del vector
 	T getX() const { return x; }
+	T getY() const { return y; }
 
 	// Operadores
 	Vector2D operator+(const Vector2D& otro) const {
 		return {x + otro.x, y + otro.y};
 	}
 
+	//Operador +=
+	Vector2D operator+=(const Vector2D& otro) {
+		x += otro.x;
+		y += otro.y;
+		return *this; //Devolvemos objeto modificado
+	}
+
+	Vector2D operator-(const Vector2D& otro) {
+		return { x - otro.x, y - otro.y };
+	}
 	// TODO: completar
 
 	// Operadores de entrada/salida
@@ -31,6 +42,8 @@ public:
 	}
 };
 
-// TODO: definir alias Point2D<T>
+// TODO: definir alias Point2D<T> (float o double) 
+template<std::floating_point T = float>
+using Point2D = Vector2D<T>;
 
 #endif // VECTOR2D_H
