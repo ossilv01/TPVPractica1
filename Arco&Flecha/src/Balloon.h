@@ -8,6 +8,8 @@ private:
 	int color;			//Indice fila textura
 	Texture* texture = nullptr; //Puntero a textura
 	Rectangle dimension;		
+	//velocidad
+	float VelEscalar = 500;
 	
 public:
 	//Constructor: pos incial ->Rectangle, velocidad, textura, color

@@ -5,6 +5,7 @@
 #include <array>
 #include <istream>
 #include <vector>
+#include <random>
 
 #include "rectangle.h"
 

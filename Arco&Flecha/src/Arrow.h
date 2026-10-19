@@ -2,6 +2,7 @@
 #include "rectangle.h"
 #include "texture.h"
 
+//por posible dependencia circular
 class Game;
 
 class Arrow
@@ -10,8 +11,7 @@ private:
 	//Puntero textura
 	Texture* tex = nullptr; 
 
-	//Puntero a game para colisiones (proximo) 
-	//posible dependencia circular? 
+	//Puntero a game para colisiones/Aprovechamos para variables publicas GAME
 	Game* game = nullptr;
 
 	//Dimensiones:

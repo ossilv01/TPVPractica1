@@ -6,7 +6,6 @@ Bow::Bow(Vector2D<float> direccion , Point2D<float> posicion, int arrows, Textur
 	tex(textura),
 	tam(posicion,804.0f / 2.0f, 381.0f)
 {
-
 }
 
 void Bow::handleEvent(const SDL_Event& event) {
