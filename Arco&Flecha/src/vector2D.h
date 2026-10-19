@@ -19,8 +19,8 @@ public:
 	T getX() const { return x; }
 	T getY() const { return y; }
 
-	//Obtener longitud del vector
-	//T lenght() const {}
+	//Obtener longitud del vector, modulo (raiz x^2 + y^2)
+	T lenght() const { return sqrt(x * x + y * y); }
 
 	// Operadores
 	Vector2D operator+(const Vector2D& otro) const {
@@ -35,13 +35,19 @@ public:
 	}
 
 	//operador -
-	Vector2D operator-(const Vector2D& otro) {
+	Vector2D operator-(const Vector2D& otro)const {
 		return { x - otro.x, y - otro.y };
 	}
 
 	//Operador * (producto por un escalar)
-	Vector2D operator*(const Vector2D& otro) {
+	Vector2D operator* (T escalar)const {
+		return { x * escalar, y * escalar };
+	}
 
+	//Producto escalar
+	//Devuelve un numero tipo T (por definicion de las mates) 
+	T operator*(const Vector2D& otro) {
+		return { (x * otro.x) + (y * otro.y) };
 	}
 
 

@@ -10,20 +10,19 @@ private:
 	Texture* tex = nullptr; 
 	//Armado o no
 	bool armed = false; 
-	//Velocidad/Direccion
-	Vector2D<float> move;
-	//Posicion
-	Point2D<float> pos;
-	//Dimensiones //2 frames 804/2
-	Rectangle tam {pos, 804/2, 381};
-
+	//Direccion movimienot
+	Vector2D<float> dir;
+	//Dimensiones 
+	Rectangle tam;
 	//numero flechas
 	int flechas; 
+	//Velocidad escalar
+	float velocidadEscalar = 300.0f;
 
 
 public:
 	//Constructor:
-	Bow(Vector2D<float>, Point2D<float>, int , Texture*, Rectangle);
+	Bow(Vector2D<float>, Point2D<float>, int , Texture*);
 	//Metodos
 	void handleEvent(const SDL_Event& event);
 	void render() const;

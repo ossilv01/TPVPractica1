@@ -1,11 +1,11 @@
 #include "Balloon.h"
 
-Balloon::Balloon(Vector2D<float>dir, Texture* texture, int color) :
+Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int color) :
 	vel(dir),
 	texture(texture),
-	color(color)
+	color(color),
+	dimension(pos, 1536.0f/7.0f, 1792.0f/6.0f)
 {
-
 }
 
 void Balloon::render()const {
