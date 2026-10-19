@@ -29,7 +29,9 @@ public:
 	{
 		BOW = 0,
 		ARROW,
+		BALLOONS,
 		NUM_TEXTURES,
+
 	};
 
 private:

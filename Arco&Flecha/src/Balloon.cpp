@@ -16,10 +16,11 @@ void Balloon::render() {
 
 bool Balloon::update(float delta) {
 
-
+	return false; 
 }
 
 
 bool Balloon::hit(const Rectangle& obj) {
 
+	return false;
 }

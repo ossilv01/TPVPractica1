@@ -25,6 +25,7 @@ struct TextureSpec
 constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 	TextureSpec{"bow.png", 1, 2},
 	{"arrow.png"},
+	{"balloons.png", 7, 6},
 
 };
 
