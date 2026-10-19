@@ -6,7 +6,7 @@
 #include <istream>
 #include <vector>
 
-// #include "rectangle.h"
+#include "rectangle.h"
 
 // Declaraciones anticipadas
 class Texture;
@@ -29,7 +29,7 @@ public:
 	{
 		BOW = 0,
 		ARROW,
-		NUM_TEXTURES
+		NUM_TEXTURES,
 	};
 
 private:
@@ -45,6 +45,7 @@ private:
 
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
+
 
 public:
 	Game();

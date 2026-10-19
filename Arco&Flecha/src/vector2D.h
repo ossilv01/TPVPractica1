@@ -19,6 +19,9 @@ public:
 	T getX() const { return x; }
 	T getY() const { return y; }
 
+	//Obtener longitud del vector
+	//T lenght() const {}
+
 	// Operadores
 	Vector2D operator+(const Vector2D& otro) const {
 		return {x + otro.x, y + otro.y};
@@ -31,9 +34,17 @@ public:
 		return *this; //Devolvemos objeto modificado
 	}
 
+	//operador -
 	Vector2D operator-(const Vector2D& otro) {
 		return { x - otro.x, y - otro.y };
 	}
+
+	//Operador * (producto por un escalar)
+	Vector2D operator*(const Vector2D& otro) {
+
+	}
+
+
 	// TODO: completar
 
 	// Operadores de entrada/salida
