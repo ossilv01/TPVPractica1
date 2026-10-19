@@ -8,8 +8,9 @@ Arrow::Arrow(Vector2D<float> direccion, Point2D<float> posicion, Texture* tex, R
 {
 };
 
-void Arrow::render() {
-
+void Arrow::render()const {
+	SDL_FRect anim = tam.to_sdl();
+	tex->render(anim);
 }
 
 bool Arrow::update(float delta) {

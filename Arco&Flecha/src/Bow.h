@@ -14,8 +14,8 @@ private:
 	Vector2D<float> move;
 	//Posicion
 	Point2D<float> pos;
-	//Dimensiones
-	Rectangle tam {pos, 402, 381};
+	//Dimensiones //2 frames 804/2
+	Rectangle tam {pos, 804/2, 381};
 
 	//numero flechas
 	int flechas; 
@@ -26,7 +26,7 @@ public:
 	Bow(Vector2D<float>, Point2D<float>, int , Texture*, Rectangle);
 	//Metodos
 	void handleEvent(const SDL_Event& event);
-	void render();
+	void render() const;
 	bool update(float delta);
 	//El equivalente a las vidas
 	int getFlechas() const;

@@ -21,12 +21,11 @@ private:
 	//Velocidad/Direccion movimiento: 
 	Vector2D <float> dir;
 
-
 public:
 	//Constructor
 	Arrow(Vector2D<float>, Point2D<float>, Texture*, Rectangle);
 
-	void render();
+	void render() const;
 	bool update(float delta);
 };
 

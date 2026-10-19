@@ -8,7 +8,7 @@ Balloon::Balloon(Vector2D<float>dir, Texture* texture, int color) :
 
 }
 
-void Balloon::render() {
+void Balloon::render()const {
 
 
 }

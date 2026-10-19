@@ -35,8 +35,11 @@ void Bow::handleEvent(const SDL_Event& event) {
 	}
 }
 
-void Bow::render() {
-
+void Bow::render()const {
+	//Del RECTANGLE definido para tema Colliders y movimiento, lo transformamos en SDL_FRect
+	SDL_FRect anim = tam.to_sdl();
+	//Mediante el puntero a texture, accedemos al metodo render apropiado
+	tex->render(anim);
 }
 
 bool Bow::update(float delta) {
