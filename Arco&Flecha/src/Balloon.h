@@ -9,7 +9,7 @@ private:
 	Texture* texture = nullptr; //Puntero a textura
 	Rectangle dimension;		
 	//velocidad
-	float VelEscalar = 500;
+	float VelEscalar = 200;
 	
 public:
 	//Constructor: pos incial ->Rectangle, velocidad, textura, color

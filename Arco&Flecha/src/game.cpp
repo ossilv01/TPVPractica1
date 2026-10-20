@@ -75,6 +75,17 @@ Game::Game()
 	//Creamos objeto arco
 	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),10, getTexture(BOW));
 
+	//Creacion ocasional de globos:
+	Balloon* globo = new Balloon(Point2D<float>(WINDOW_WIDTH/2, WINDOW_HEIGHT+100), Vector2D<float>(0, -1), getTexture(BALLOONS), 2);
+	balloons.push_back(globo);
+	Balloon* globo2 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2+ 100, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 1);
+	balloons.push_back(globo2);
+	Balloon* globo3 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2 -100, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 4);
+	balloons.push_back(globo3);
+	Balloon* globo4 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2 +200, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 6);
+	balloons.push_back(globo4);
+
+
 }
 
 Game::~Game()
