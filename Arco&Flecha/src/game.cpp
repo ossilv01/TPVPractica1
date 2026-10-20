@@ -64,7 +64,12 @@ Game::Game()
 	}
 	catch (...) {
 		// TODO: liberar la memoria reservada
-		for (auto tex : textures) delete tex;
+		for (auto tex : textures) {
+			if (tex != nullptr)
+			delete tex;
+			tex = nullptr;
+		}
+
 		throw; // relanza la excepción
 	}
 
@@ -117,11 +122,18 @@ Game::~Game()
 {
 	// TODO: liberar la memoria reservada por la clase
 	//Liberamos objeto bow y vectores objetos
-	delete bow;
+	if (bow != nullptr) {
+		delete bow;
+		bow = nullptr;
+	}
 	for (Arrow* a : arrows) delete a;
 	for (Balloon* b : balloons) delete b;
 	//Libera array texturas
-	for (Texture* texture : textures) delete texture;
+	for (Texture* texture : textures) {
+		if (texture != nullptr)
+		delete texture;
+		texture = nullptr;
+	}
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
