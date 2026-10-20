@@ -175,6 +175,35 @@ Game::handleEvents()
 		if (bow != nullptr) {
 			bow->handleEvent(event);
 		}
+
+		//Detectar disparo
+		if (event.type == SDL_EVENT_KEY_DOWN) {
+			if (event.key.key == SDLK_D || event.key.key == SDLK_RIGHT) {
+				if (bow != nullptr && bow->canShoot()) {
+					//Punto referencia de flecha respecto a Arco (esquina)
+					Point2D<float> arcoPos = bow->getPosition();
+
+					//alturas arco 
+					float a = 100;
+					//Altura flecha
+					float b = 82.0f / 9.0f;
+
+					//Centrar flecha
+					float flechaY = arcoPos.getY() + a/2 - b/2;
+					//Nuevo punto centrado:
+					Point2D<float> posCentro(arcoPos.getX(), flechaY);
+
+					Arrow* newflecha = new Arrow(
+						Vector2D<float>(1, 0),
+						posCentro,
+						getTexture(ARROW),
+						this
+					);
+					arrows.push_back(newflecha);
+					bow->Shoot();
+				}
+			}
+		}
 	}
 }
 

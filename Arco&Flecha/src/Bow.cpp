@@ -1,10 +1,11 @@
 #include "Bow.h"
 
-Bow::Bow(Vector2D<float> direccion , Point2D<float> posicion, int arrows, Texture* textura):
+Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura) :
 	dir(direccion),
-	flechas(arrows),
+	flechas(10),
 	tex(textura),
-	tam(posicion,100.0f/2.0f, 100.0f)
+	tam(posicion, 100.0f / 2.0f, 100.0f),
+	armed(false)
 {
 }
 //804.0f / 2.0f, 381.0f
@@ -20,15 +21,15 @@ void Bow::handleEvent(const SDL_Event& event) {
 			dir = Vector2D<float>(0, 1); //Hacia abajo
 			break;
 
-		case SDLK_A: case SDLK_LEFT:
+		case SDLK_A: case SDLK_LEFT:			
 			flechas--;
 			armed = true;
 			
 			break;
 
-		case SDLK_D: case SDLK_RIGHT:
-			armed = false;
-			break;
+		//case SDLK_D: case SDLK_RIGHT:
+		//	armed = false;
+		//	break;
 
 		default:
 			break;
@@ -98,6 +99,18 @@ bool Bow::update(float delta, float windowHeight) {
 	return true;
 }
 
+bool Bow::canShoot() const {
+	return armed && flechas > 0;
+}
+
+void Bow::Shoot() {
+	armed = false;
+}
+
 int Bow::getFlechas() const {
 	return flechas;
+}
+
+Point2D<float> Bow::getPosition() {
+	return tam.getTopLeftCorner();
 }

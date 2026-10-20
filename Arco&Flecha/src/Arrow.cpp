@@ -3,7 +3,7 @@
 Arrow::Arrow(Vector2D<float> direccion, Point2D<float> posicion, Texture* tex, Game* game) :
 	dir(direccion),
 	tex(tex),
-	tam(posicion, 100.0f, 100.0f),
+	tam(posicion, 404.0f/9, 82.0f/9),
 	game(game)
 {
 };
@@ -21,8 +21,14 @@ bool Arrow::update(float delta) {
 
 	//Si X supera el ancho de pantalla. La flecha se salio de la pantalla
 	//Metodos de rectangle
-	if (tam.getTopLeftCorner().getX() >= game->WINDOW_WIDTH) {
+	float puntaX = tam.getTopLeftCorner().getX() + tam.getWidth();
+	if (puntaX>= game->WINDOW_WIDTH) {
 		return false;
+	}
+
+	//Colision globos:
+	if (game->checkCollision(tam)) {
+
 	}
 	return true; 
 }

@@ -8,7 +8,7 @@
 #include <random>
 
 #include "rectangle.h"
-
+using namespace std;
 // Declaraciones anticipadas
 class Texture;
 class Bow;
@@ -51,8 +51,8 @@ private:
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
 	Bow* bow = nullptr;
-	std::vector<Arrow*> arrows; //Vector dinamico flechas
-	std::vector<Balloon*> balloons; //Vector dinamico de globos
+	vector<Arrow*> arrows; //Vector dinamico flechas
+	vector<Balloon*> balloons; //Vector dinamico de globos
 
 
 public:

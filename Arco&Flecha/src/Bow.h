@@ -9,7 +9,7 @@ private:
 	//puntero a textura
 	Texture* tex = nullptr; 
 	//Armado o no
-	bool armed = false; 
+	bool armed; 
 	//Direccion movimienot
 	Vector2D<float> dir;
 	//Dimensiones 
@@ -29,6 +29,12 @@ public:
 	bool update(float delta, float windowHeight);
 	//El equivalente a las vidas
 	int getFlechas() const;
+
+	//Metodos para disparo
+	bool canShoot() const;
+	void Shoot();
+	//getter de Point2D
+	Point2D <float> getPosition();
 
 };
 
