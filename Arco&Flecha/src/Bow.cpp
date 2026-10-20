@@ -58,8 +58,8 @@ void Bow::render()const {
 
 	//Cambio entre columna de frame: Armado y desarmado
 	int columna;
-	if (armed) columna = 1;
-	else columna = 0;
+	if (armed) columna = 0;
+	else columna = 1;
 	int fila = 0;
 
 	//Mediante el puntero a texture, accedemos al metodo render apropiado

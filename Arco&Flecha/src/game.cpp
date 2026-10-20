@@ -1,3 +1,9 @@
+//SOlucion:
+//Cambiar Directorio de trabajo:C:\Users\kenai\Desktop\TPVPractica1\Arco&Flecha\bin\
+
+//Actual:
+//Anterior:$(ProjectDir)
+
 #include "game.h"
 
 #include <string>
@@ -7,6 +13,7 @@
 #include "Bow.h"
 #include "Arrow.h"
 #include "Balloon.h"
+
 #include "texture.h"
 
 using namespace std;
@@ -38,7 +45,7 @@ Game::Game()
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
 		throw "SDL_Init: "s + SDL_GetError();
-	 
+
 	if (!SDL_CreateWindowAndRenderer(WINDOW_TITLE,
 	                                 WINDOW_WIDTH, WINDOW_HEIGHT,
 	                                 0, &window, &renderer))
