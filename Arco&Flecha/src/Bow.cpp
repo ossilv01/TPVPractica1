@@ -73,7 +73,7 @@ bool Bow::update(float delta) {
 	//Metodo de Rectangle para tb acutalizar su posicion;
 	tam.move(desplazamiento);
 
-	//Nunca se destruye el arco
+	//Nunca se """destruye""" el arco
 	return true;
 }
 

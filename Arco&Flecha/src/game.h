@@ -11,7 +11,9 @@
 
 // Declaraciones anticipadas
 class Texture;
-
+class Bow;
+class Arrow;
+class Balloon;
 /**
  * Clase principal del juego.
  */
@@ -41,13 +43,16 @@ private:
 	std::array<Texture*, NUM_TEXTURES> textures;
 
 	void render() const;
-	void update();
+	void update(float delta);
 	void handleEvents();
 
 	bool exit;
 
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
+	Bow* bow = nullptr;
+	std::vector<Arrow*> arrows; //Vector dinamico flechas
+	std::vector<Balloon*> balloons; //Vector dinamico de globos
 
 
 public:
@@ -61,7 +66,7 @@ public:
 	void run();
 
 	// Comprueba si hay algún objeto colocado en ese rectángulo
-	// bool checkCollision(const Rectangle& rect);
+	 bool checkCollision(const Rectangle& rect);
 };
 
 inline Texture*
