@@ -13,9 +13,10 @@
 #include "Bow.h"
 #include "Arrow.h"
 #include "Balloon.h"
-
 #include "texture.h"
 
+#include <random> //semilla
+#include <ctime>; // time()
 using namespace std;
 
 // Constantes
@@ -75,14 +76,38 @@ Game::Game()
 	//Creamos objeto arco
 	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),10, getTexture(BOW));
 
+	//semilla generadora aleatoria
+	random_device rd; 
+	//motor
+	std::mt19937 gen(rd());
+
+	//rango colores aleatorios
+	int color = uniform_int_distribution<int>(0, 6)(gen);
+	int color1 = uniform_int_distribution<int>(0, 6)(gen);
+	int color2 = uniform_int_distribution<int>(0, 6)(gen);
+	int color3 = uniform_int_distribution<int>(0, 6)(gen);
+
+	//rango posiciones horizontales 
+	int posX = uniform_int_distribution<int>(WINDOW_WIDTH/4, WINDOW_WIDTH-100)(gen);
+	int posX1 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
+	int posX2 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
+	int posX3 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
+
+	//rango velocidades globo
+	float vel = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
+	float vel1 = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
+	float vel2 = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
+	float vel3 = uniform_real_distribution<float>(1.0f,3.0f)(gen);
+
+		
 	//Creacion ocasional de globos:
-	Balloon* globo = new Balloon(Point2D<float>(WINDOW_WIDTH/2, WINDOW_HEIGHT+100), Vector2D<float>(0, -1), getTexture(BALLOONS), 2);
+	Balloon* globo = new Balloon(Point2D<float>(posX, WINDOW_HEIGHT+100), Vector2D<float>(0, -1)*vel, getTexture(BALLOONS), color);
 	balloons.push_back(globo);
-	Balloon* globo2 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2+ 100, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 1);
+	Balloon* globo2 = new Balloon(Point2D<float>(posX2, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)*vel1, getTexture(BALLOONS), color1);
 	balloons.push_back(globo2);
-	Balloon* globo3 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2 -100, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 4);
+	Balloon* globo3 = new Balloon(Point2D<float>(posX3, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)* vel2, getTexture(BALLOONS), color2);
 	balloons.push_back(globo3);
-	Balloon* globo4 = new Balloon(Point2D<float>(WINDOW_WIDTH / 2 +200, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1), getTexture(BALLOONS), 6);
+	Balloon* globo4 = new Balloon(Point2D<float>(posX1, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)* vel3, getTexture(BALLOONS), color3);
 	balloons.push_back(globo4);
 
 
@@ -214,6 +239,12 @@ Game::handleEvents()
 					bow->Shoot();
 				}
 			}
+		}
+
+		//Detectar cuando Globo sale, para poder generar SOLO EN ESE CASO otro, SI y solo SI es que hay
+		//Si el vector de balloons no esta vacio, significa que al menos hay 1 
+		if (balloons.size() != 0) {
+
 		}
 	}
 }
