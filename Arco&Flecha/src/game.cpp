@@ -95,7 +95,7 @@ Game::~Game()
 void
 Game::render() const
 {
-	SDL_SetRenderDrawColor(renderer, 0, 125, 250, 0);
+	SDL_SetRenderDrawColor(renderer, 0, 170, 85, 0);
 	SDL_RenderClear(renderer);
 
 	// TODO
@@ -112,7 +112,7 @@ Game::update(float delta)
 	// TODO
 	//Arco
 	if (bow != nullptr) {
-		bow->update(delta);
+		bow->update(delta, WINDOW_HEIGHT);
 	}
 	//Flechas
 	//bucle inverso para borrar de forma segura

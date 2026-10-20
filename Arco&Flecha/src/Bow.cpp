@@ -4,9 +4,10 @@ Bow::Bow(Vector2D<float> direccion , Point2D<float> posicion, int arrows, Textur
 	dir(direccion),
 	flechas(arrows),
 	tex(textura),
-	tam(posicion,804.0f / 2.0f, 381.0f)
+	tam(posicion,100.0f/2.0f, 100.0f)
 {
 }
+//804.0f / 2.0f, 381.0f
 
 void Bow::handleEvent(const SDL_Event& event) {
 	//Presiona tecla hacia abajo
@@ -66,10 +67,30 @@ void Bow::render()const {
 	tex->renderFrame(anim,fila,columna);
 }
 
-bool Bow::update(float delta) {
+// nuevo parametro para obtener Window_Height (se declara en game.cpp)
+bool Bow::update(float delta, float windowHeight) {
 
 	// v= direccion * velocidad * tiempo;
 	Vector2D<float> desplazamiento = dir * (velocidadEscalar * delta);
+
+	//Posicion actual esquina
+	Point2D<float> esquina = tam.getTopLeftCorner();
+
+	//tamaño altura arco
+	float altoArco = tam.getHeight();
+	//Actuación preventiva asumiendo Y tras el movimiento
+	float nextY = esquina.getY() + desplazamiento.getY();
+
+	//Limite superior
+	if (nextY < 0) {
+		desplazamiento = Vector2D<float>(desplazamiento.getX(), -esquina.getY());
+	}
+	//Limite inferior
+	else if (nextY + altoArco > windowHeight) {
+		float spaceLeft=  windowHeight - (esquina.getY() + altoArco);
+		desplazamiento = Vector2D<float>(desplazamiento.getX(), spaceLeft);
+	}
+
 	//Metodo de Rectangle para tb acutalizar su posicion;
 	tam.move(desplazamiento);
 

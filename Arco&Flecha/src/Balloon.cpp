@@ -3,10 +3,11 @@ Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int c
 	vel(dir),
 	texture(texture),
 	color(color),
-	dimension(pos, 1536.0f / 7.0f, 1792.0f / 6.0f)
+	dimension(pos, 100.0f, 100.0f)
 {
 }
 
+/*1536.0f / 7.0f, 1792.0f / 6.0f*/
 void Balloon::render()const {
 	SDL_FRect anim = dimension.to_sdl();
 	int fil = color;

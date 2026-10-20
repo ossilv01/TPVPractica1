@@ -3,11 +3,12 @@
 Arrow::Arrow(Vector2D<float> direccion, Point2D<float> posicion, Texture* tex, Game* game) :
 	dir(direccion),
 	tex(tex),
-	tam(posicion, 404.0f, 82.0f),
+	tam(posicion, 100.0f, 100.0f),
 	game(game)
 {
 };
 
+//404.0f, 82.0f
 void Arrow::render()const {
 	SDL_FRect anim = tam.to_sdl();
 	tex->render(anim);

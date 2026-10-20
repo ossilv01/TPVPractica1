@@ -26,7 +26,7 @@ public:
 	//Metodos
 	void handleEvent(const SDL_Event& event);
 	void render() const;
-	bool update(float delta);
+	bool update(float delta, float windowHeight);
 	//El equivalente a las vidas
 	int getFlechas() const;
 
