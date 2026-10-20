@@ -240,12 +240,6 @@ Game::handleEvents()
 				}
 			}
 		}
-
-		//Detectar cuando Globo sale, para poder generar SOLO EN ESE CASO otro, SI y solo SI es que hay
-		//Si el vector de balloons no esta vacio, significa que al menos hay 1 
-		if (balloons.size() != 0) {
-
-		}
 	}
 }
 

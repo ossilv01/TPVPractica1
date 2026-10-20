@@ -21,10 +21,11 @@ void Bow::handleEvent(const SDL_Event& event) {
 			dir = Vector2D<float>(0, 1); //Hacia abajo
 			break;
 
-		case SDLK_A: case SDLK_LEFT:			
-			flechas--;
-			armed = true;
-			
+		case SDLK_A: case SDLK_LEFT:	
+			if (flechas > 0 && !armed) {
+				armed = true;
+			}
+
 			break;
 
 		//case SDLK_D: case SDLK_RIGHT:
@@ -100,11 +101,12 @@ bool Bow::update(float delta, float windowHeight) {
 }
 
 bool Bow::canShoot() const {
-	return armed && flechas > 0;
+	return armed;
 }
 
 void Bow::Shoot() {
 	armed = false;
+	if (flechas > 0) flechas--;
 }
 
 int Bow::getFlechas() const {
