@@ -4,7 +4,7 @@ Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture
 	dir(direccion),
 	flechas(10),
 	tex(textura),
-	tam(posicion, 100.0f / 2.0f, 100.0f),
+	tam(posicion, 100.0f, 100.0f),
 	armed(false)
 {
 }

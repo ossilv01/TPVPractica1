@@ -4,6 +4,10 @@
 //Actual:
 //Anterior:$(ProjectDir)
 
+//Error 2026 Proyecto
+//Configuracion: Todas las config.
+//Conjunto de herramientas de la plataforma: v145 for Microsoft C++ 
+
 #include "game.h"
 
 #include <string>
@@ -199,6 +203,10 @@ Game::run()
 		update(delta);
 		render();
 
+		//DELAY
+		// PUNTERO GAME A BOW PARA ACCEDER A CONSTANTE
+		// HANDLE EVENTS SIMPLEMENTE SE LLAMA AL DE BOW 
+		// NO MEZCLAR CODIGO 
 		//Extra i guess
 		Uint32 frameTime = SDL_GetTicks() - startTime;
 		if (frameTime < FRAME_PERIOD) {

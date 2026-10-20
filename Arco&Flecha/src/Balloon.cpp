@@ -3,7 +3,7 @@ Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int c
 	vel(dir),
 	texture(texture),
 	color(color),
-	dimension(pos, 100.0f, 100.0f)
+	dimension(pos, altura, anchura)
 {
 }
 
