@@ -21,7 +21,7 @@ bool Arrow::update(float delta) {
 
 	//Si X supera el ancho de pantalla. La flecha se salio de la pantalla
 	//Metodos de rectangle
-	float puntaX = tam.getTopLeftCorner().getX() + tam.getWidth();
+	float puntaX = tam.getTopLeftCorner().getX() + tam.getHeight();
 	if (puntaX>= game->WINDOW_WIDTH) {
 		return false;
 	}
