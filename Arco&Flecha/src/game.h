@@ -50,7 +50,7 @@ private:
 
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
-	Bow* bow = nullptr;
+	Bow* bow = nullptr; // puntero a arco
 	vector<Arrow*> arrows; //Vector dinamico flechas
 	vector<Balloon*> balloons; //Vector dinamico de globos
 
@@ -67,6 +67,13 @@ public:
 
 	// Comprueba si hay algún objeto colocado en ese rectángulo
 	 bool checkCollision(const Rectangle& rect);
+	 
+	 //Metodo para instnaciar creacion flecha
+	 void addArrow(Arrow* arrow) {
+		 arrows.push_back(arrow);
+	 }
+
+
 };
 
 inline Texture*

@@ -1,5 +1,6 @@
 #include "Bow.h"
 #include "game.h"
+#include "Arrow.h"
 
 Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura, Game* game) :
 	dir(direccion),
@@ -13,8 +14,7 @@ Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture
 //804.0f / 2.0f, 381.0f
 
 void Bow::handleEvent(const SDL_Event& event) {
-	//Presiona tecla hacia abajo
-	if (event.type == SDL_EVENT_KEY_DOWN) {
+	if (event.type == SDL_EVENT_KEY_DOWN) { 	//Presiona tecla hacia abajo
 		switch (event.key.key) {
 		case SDLK_W: case SDLK_UP:
 			dir = Vector2D<float>(0, -1); //Hacia arriba
@@ -27,31 +27,29 @@ void Bow::handleEvent(const SDL_Event& event) {
 			if (flechas > 0 && !armed) {
 				armed = true;
 			}
-
 			break;
-
-		//case SDLK_D: case SDLK_RIGHT:
-		//	armed = false;
-		//	break;
-
-		default:
+		case SDLK_D: case SDLK_RIGHT:
+			if (canShoot()) {
+				Point2D<float> arcoPos = getPosition();   //Punto referencia de flecha respecto a Arco (esquina)
+				//armed = false;
+				float a = tam.getHeight();		//100.0f =altura arco 
+				float b = 82.0f / 9.0f;			//altura flecha
+				float flechaY = arcoPos.getY() + (a/2.0f) - (b / 2.0f);  //Centrar flecha
+				Point2D<float> posCentro(arcoPos.getX(), flechaY); 		//Nuevo punto centrado:
+				Arrow* newFlecha = new Arrow(Vector2D<float>(1, 0), posCentro,game->getTexture(Game::ARROW),game); //instanciamos flecha
+				game->addArrow(newFlecha);
+				Shoot();
+			}
 			break;
 		}
 	}
-	//Deja de presionar tecla
-	else if (event.type == SDL_EVENT_KEY_UP) {
+	else if (event.type == SDL_EVENT_KEY_UP) { 	//Deja de presionar tecla
 		switch (event.key.key) {
-			//Para que no se mueva infinitamente
-			//Paramos subir
-		case SDLK_W: case SDLK_UP:
+		case SDLK_W: case SDLK_UP: 			//Para que no se mueva infinitamente. Paramos subir
 			if (dir.getY() < 0) dir = Vector2D<float>(0, 0);
 			break;
-			//Paramos al bajar
-		case SDLK_S: case SDLK_DOWN:
+		case SDLK_S: case SDLK_DOWN:			//Paramos al bajar
 			if (dir.getY() > 0) dir = Vector2D<float>(0, 0);
-			break;
-
-		default:
 			break;
 		}
 	}

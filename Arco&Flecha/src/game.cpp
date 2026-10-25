@@ -90,6 +90,7 @@ Game::Game()
 	//motor
 	std::mt19937 gen(rd());
 
+	//Crear con while. .Supera el limite de las 30 -40 lineas por metodo 
 	//rango colores aleatorios
 	int color = uniform_int_distribution<int>(0, 6)(gen);
 	int color1 = uniform_int_distribution<int>(0, 6)(gen);
@@ -110,6 +111,9 @@ Game::Game()
 
 		
 	//Creacion ocasional de globos:
+												//poscion de inicio, HEIGHT + 100 = por debajo del mapa
+												// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
+												//textura + color (randomizado)
 	Balloon* globo = new Balloon(Point2D<float>(posX, WINDOW_HEIGHT+100), Vector2D<float>(0, -1)*vel, getTexture(BALLOONS), color);
 	balloons.push_back(globo);
 	Balloon* globo2 = new Balloon(Point2D<float>(posX2, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)*vel1, getTexture(BALLOONS), color1);
@@ -207,7 +211,6 @@ Game::run()
 		// PUNTERO GAME A BOW PARA ACCEDER A CONSTANTE
 		// HANDLE EVENTS SIMPLEMENTE SE LLAMA AL DE BOW 
 		// NO MEZCLAR CODIGO 
-		//Extra i guess
 		Uint32 frameTime = SDL_GetTicks() - startTime;
 		if (frameTime < FRAME_PERIOD) {
 			SDL_Delay(FRAME_PERIOD - frameTime);
@@ -225,40 +228,10 @@ Game::handleEvents()
 	while (SDL_PollEvent(&event) &&!exit) {
 		if (event.type == SDL_EVENT_QUIT)
 			exit = true;
-
 		// TODO
 		//Llamamos al handleEvent de bow (movimiento y demas)
 		if (bow != nullptr) {
 			bow->handleEvent(event);
-		}
-
-		//Detectar disparo
-		if (event.type == SDL_EVENT_KEY_DOWN) {
-			if (event.key.key == SDLK_D || event.key.key == SDLK_RIGHT) {
-				if (bow != nullptr && bow->canShoot()) {
-					//Punto referencia de flecha respecto a Arco (esquina)
-					Point2D<float> arcoPos = bow->getPosition();
-
-					//alturas arco 
-					float a = 100;
-					//Altura flecha
-					float b = 82.0f / 9.0f;
-
-					//Centrar flecha
-					float flechaY = arcoPos.getY() + a/2 - b/2;
-					//Nuevo punto centrado:
-					Point2D<float> posCentro(arcoPos.getX(), flechaY);
-
-					Arrow* newflecha = new Arrow(
-						Vector2D<float>(1, 0),
-						posCentro,
-						getTexture(ARROW),
-						this
-					);
-					arrows.push_back(newflecha);
-					bow->Shoot();
-				}
-			}
 		}
 	}
 }
