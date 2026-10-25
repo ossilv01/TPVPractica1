@@ -3,7 +3,7 @@
 Arrow::Arrow(Vector2D<float> direccion, Point2D<float> posicion, Texture* tex, Game* game) :
 	dir(direccion),
 	tex(tex),
-	tam(posicion, 404.0f/9, 82.0f/9),
+	tam(posicion, anchura, altura),
 	game(game)
 {
 };
@@ -26,9 +26,13 @@ bool Arrow::update(float delta) {
 		return false;
 	}
 
+	float anchoPunta = 20.0f; //grosor collider punta flecha
+	Point2D<float> posPunta(tam.getTopLeftCorner().getX() + tam.getWidth() - anchoPunta, tam.getTopLeftCorner().getY());
+	Rectangle colliderPunta(posPunta, anchoPunta, tam.getHeight());
 	//Colision globos:
-	if (game->checkCollision(tam)) {
-
+	//el tam esta puesto provisionalmente
+	if (game->checkCollision(colliderPunta)) {
+		return false;
 	}
 	return true; 
 }

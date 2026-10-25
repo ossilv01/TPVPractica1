@@ -8,6 +8,12 @@ class Game;
 class Arrow
 {
 private:
+	//dimensiones
+	//404.0f/9, 82.0f/9
+
+	static constexpr float anchura = 404.0f/9;
+	static constexpr float altura = 82.0f/9;
+
 	//Puntero textura
 	Texture* tex = nullptr; 
 

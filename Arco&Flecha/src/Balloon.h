@@ -13,6 +13,20 @@ private:
 	static constexpr float VelEscalar = 100.0f;
 	static constexpr float altura = 100.0f;
 	static constexpr float anchura = 100.0f;
+	//Animacion
+	bool explotado = false;
+	float frameActual = 0.0f;
+	//v.1 con static cast
+	static constexpr float VEL_ANIMACION = 12.0f;
+
+	//v.2
+	//static constexpr float  TIEMPO_FRAME = 0.08f;
+	//int frameActual = 0.0f;
+	//float timerAnimation = 0.0f; //control de tiempo
+	//int columnaActual = 0;
+
+
+
 
 	//float VelEscalar = 100;
 	

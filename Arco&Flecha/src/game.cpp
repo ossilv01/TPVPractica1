@@ -228,5 +228,12 @@ Game::generateBalloon() {
  Game::checkCollision(const Rectangle& rect)
  {
 	// TODO
+	 for (auto globo : balloons) {
+		 if (globo != nullptr) {
+			 if (globo->hit(rect)) {
+				 return true; //Ha habido colision
+			 }
+		 }
+	 }
 	return false;
  }

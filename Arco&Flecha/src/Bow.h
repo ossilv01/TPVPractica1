@@ -7,6 +7,11 @@ class Game;
 class Bow
 {
 private:
+
+	//dimensiones
+	static constexpr float altura = 100.0f;
+	static constexpr float anchura = 100.0f;
+
 	//puntero a textura
 	Texture* tex = nullptr; 
 	//puntero a game
