@@ -83,7 +83,7 @@ Game::Game()
 	
 	// TODO: crear los objetos del juego
 	//Creamos objeto arco
-	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),10, getTexture(BOW));
+	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),10, getTexture(BOW), this);
 
 	//semilla generadora aleatoria
 	random_device rd; 
@@ -164,7 +164,7 @@ Game::update(float delta)
 	// TODO
 	//Arco
 	if (bow != nullptr) {
-		bow->update(delta, WINDOW_HEIGHT);
+		bow->update(delta);
 	}
 	//Flechas
 	//bucle inverso para borrar de forma segura

@@ -3,11 +3,14 @@
 #include "vector2D.h"
 #include "rectangle.h"
 
+class Game;
 class Bow
 {
 private:
 	//puntero a textura
 	Texture* tex = nullptr; 
+	//puntero a game
+	Game* game = nullptr;
 	//Armado o no
 	bool armed; 
 	//Direccion movimienot
@@ -15,18 +18,18 @@ private:
 	//Dimensiones 
 	Rectangle tam;
 	//numero flechas
-	int flechas; 
+	int flechas = 10; 
 	//Velocidad escalar
 	float velocidadEscalar = 300.0f;
 
 
 public:
 	//Constructor:
-	Bow(Vector2D<float>, Point2D<float>, int , Texture*);
+	Bow(Vector2D<float>, Point2D<float>, int , Texture*, Game*);
 	//Metodos
 	void handleEvent(const SDL_Event& event);
 	void render() const;
-	bool update(float delta, float windowHeight);
+	bool update(float delta);
 	//El equivalente a las vidas
 	int getFlechas() const;
 

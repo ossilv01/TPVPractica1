@@ -1,10 +1,12 @@
 #include "Bow.h"
+#include "game.h"
 
-Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura) :
+Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura, Game* game) :
 	dir(direccion),
-	flechas(10),
+	flechas(arrows),
 	tex(textura),
 	tam(posicion, 100.0f, 100.0f),
+	game(game),
 	armed(false)
 {
 }
@@ -70,7 +72,7 @@ void Bow::render()const {
 }
 
 // nuevo parametro para obtener Window_Height (se declara en game.cpp)
-bool Bow::update(float delta, float windowHeight) {
+bool Bow::update(float delta) {
 
 	// v= direccion * velocidad * tiempo;
 	Vector2D<float> desplazamiento = dir * (velocidadEscalar * delta);
@@ -88,8 +90,8 @@ bool Bow::update(float delta, float windowHeight) {
 		desplazamiento = Vector2D<float>(desplazamiento.getX(), -esquina.getY());
 	}
 	//Limite inferior
-	else if (nextY + altoArco > windowHeight) {
-		float spaceLeft=  windowHeight - (esquina.getY() + altoArco);
+	else if (nextY + altoArco > game->WINDOW_HEIGHT){
+		float spaceLeft= game->WINDOW_HEIGHT - (esquina.getY() + altoArco);
 		desplazamiento = Vector2D<float>(desplazamiento.getX(), spaceLeft);
 	}
 

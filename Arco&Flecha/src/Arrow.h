@@ -2,7 +2,7 @@
 #include "rectangle.h"
 #include "texture.h"
 
-//por posible dependencia circular
+//para evitar  dependencia circular
 class Game;
 
 class Arrow
