@@ -15,7 +15,7 @@ private:
 	static constexpr float anchura = 100.0f;
 	//Animacion
 	bool explotado = false; //tb para sistema de puntuacion
-	float frameActual = 0.0f;
+	float frameActual = 0.0f; //clave para luego el static cast
 	//v.1 con static cast
 	static constexpr float VEL_ANIMACION = 12.0f;
 
@@ -24,10 +24,6 @@ private:
 	//int frameActual = 0.0f;
 	//float timerAnimation = 0.0f; //control de tiempo
 	//int columnaActual = 0;
-
-
-
-
 	//float VelEscalar = 100;
 	
 public:
