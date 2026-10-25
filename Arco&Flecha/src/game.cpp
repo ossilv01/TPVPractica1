@@ -9,7 +9,7 @@
 //Conjunto de herramientas de la plataforma: v145 for Microsoft C++ 
 
 #include "game.h"
-
+#include <iostream>
 #include <string>
 
 #include <SDL3_image/SDL_image.h>
@@ -41,11 +41,12 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 	TextureSpec{"bow.png", 1, 2},
 	{"arrow.png"},
 	{"balloons.png", 7, 6},
+	{"digits.png", 1, 10}
 
 };
 
 Game::Game()
-  : exit(false)
+  : exit(false), score(0)
 {
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
@@ -122,6 +123,8 @@ Game::render() const
 	if (bow != nullptr) bow->render();
 	for (Arrow* a : arrows) a->render();
 	for (Balloon* b : balloons) b->render();
+	//Puntuacion
+	imprimirScore();
 
 	SDL_RenderPresent(renderer);
 }
@@ -155,7 +158,12 @@ Game::update(float delta)
 
 	// Globos
 	for (auto it = balloons.begin(); it != balloons.end(); ) {
+		//Muerto En general
 		if (!(*it)->update(delta)) {
+			//Si ha sido porque ha explotado
+			if ((*it)->getterExplotado()) {
+				score += 100;
+			}
 			delete* it;
 			it = balloons.erase(it);
 		}
@@ -163,6 +171,8 @@ Game::update(float delta)
 			++it;
 		}
 	}
+	//Impresion en consola:
+	imprimirResult();
 }
 
 void
@@ -222,6 +232,64 @@ Game::generateBalloon() {
 		color);
 
 	balloons.push_back(globo);
+}
+
+void
+Game::imprimirResult() {
+	if (bow != nullptr) {
+		int flechasDisponibles = bow->getFlechas();
+		static int ultimaCantidadFlechas = -1; // Guarda el estado del fotograma anterior
+
+		// Solo imprimimos si el jugador ha disparado (el número cambió)
+		if (flechasDisponibles != ultimaCantidadFlechas) {
+			cout << "Flechas restantes: " << flechasDisponibles << endl;
+			ultimaCantidadFlechas = flechasDisponibles;
+		}
+
+		// Si ya no quedan flechas en el arco Y todas las flechas disparadas han salido de la pantalla
+		if (flechasDisponibles == 0 && arrows.empty()) {
+			cout << "\n" << endl;
+			cout << "FIN DEL JUEGO. Sin municion." << endl;
+			cout << "Puntuacion final: " << score << " puntos." << endl;
+
+			exit = true; // Rompe el bucle del Game::run() y cierra el juego limpiamente
+		}
+	}
+}
+
+void
+Game::imprimirScore() const{
+	Texture* digitsTex = getTexture(DIGITS);
+	if (digitsTex != nullptr) {
+		int tempScore = score;
+
+		//ancho y alto de cada cifra en pantalla
+		float digitWidth = DIGIT_WIDTH;
+		float digitHeight = DIGIT_HEIGHT;
+
+		// margen inicial desde el borde derecho de la ventana
+		float currentX = DIGIT_X;
+		float currentY = DIGIT_Y;
+
+		// Pintamos 0 inicial
+		if (tempScore == 0) {
+			SDL_FRect destRect = { currentX, currentY, digitWidth, digitHeight };
+			digitsTex->renderFrame(destRect, 0, 0); //fila 0, columna 0
+		}
+
+		// Descomponemos el número dígito por dígito cuando reciba puntuacion
+		while (tempScore > 0) {
+			int digit = tempScore % 10; // Para empezar obtenemos el último dígito. 100 -> 0
+			SDL_FRect destRect = { currentX, currentY, digitWidth, digitHeight };
+
+			// Dibujamos el dígito correspondiente usando la columna de la textura
+			digitsTex->renderFrame(destRect, 0, digit);
+
+			// Desplazamos la posición X hacia la izquierda para el siguiente dígito
+			currentX -= (digitWidth + 2.0f);
+			tempScore /= 10; // Eliminamos el último dígito ya pintado, 100 -> 10s
+		}
+	}
 }
 
  bool

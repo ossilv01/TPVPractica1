@@ -31,8 +31,9 @@ bool Arrow::update(float delta) {
 	Rectangle colliderPunta(posPunta, anchoPunta, tam.getHeight());
 	//Colision globos:
 	//el tam esta puesto provisionalmente
-	if (game->checkCollision(colliderPunta)) {
-		return false;
-	}
+	//Detecta si ha habido impacto, pero la flecha sigue estando
+	game->checkCollision(colliderPunta);
+		
+	
 	return true; 
 }

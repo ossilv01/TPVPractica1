@@ -14,7 +14,7 @@ private:
 	static constexpr float altura = 100.0f;
 	static constexpr float anchura = 100.0f;
 	//Animacion
-	bool explotado = false;
+	bool explotado = false; //tb para sistema de puntuacion
 	float frameActual = 0.0f;
 	//v.1 con static cast
 	static constexpr float VEL_ANIMACION = 12.0f;
@@ -36,6 +36,7 @@ public:
 	void render() const;
 	bool update(float delta);
 	bool hit(const Rectangle& obj);
+	bool getterExplotado() const;
 
 };
 

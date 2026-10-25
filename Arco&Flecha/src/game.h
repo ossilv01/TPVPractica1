@@ -28,11 +28,20 @@ public:
 	static constexpr int WINDOW_WIDTH = 800;
 	static constexpr int WINDOW_HEIGHT = 600;
 
+	//Constantes texto puntuacion: 
+	static constexpr float DIGIT_WIDTH = 24.0F;
+	static constexpr float  DIGIT_HEIGHT = 32.0F;
+	static constexpr float  DIGIT_X = WINDOW_WIDTH- DIGIT_WIDTH- 20.0f;
+	static constexpr float  DIGIT_Y = 20;
+
+
+
 	enum TextureName
 	{
 		BOW = 0,
 		ARROW,
 		BALLOONS,
+		DIGITS,
 		NUM_TEXTURES,
 
 	};
@@ -60,6 +69,14 @@ private:
 
 	//Metodo auxiliar para generar globos
 	void generateBalloon();
+
+	//Metodo auxiliar para imprimir nºflechas en consola:
+	void imprimirResult();
+	//Metodo auxiliar para imprimir Puntuacion en el juego
+	void imprimirScore() const;
+
+	//Puntuacion
+	int score = 0;
 
 
 

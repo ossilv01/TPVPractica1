@@ -72,3 +72,7 @@ bool Balloon::hit(const Rectangle& obj) {
 	}
 	return false;
 }
+
+bool Balloon::getterExplotado() const {
+	return explotado;
+}
