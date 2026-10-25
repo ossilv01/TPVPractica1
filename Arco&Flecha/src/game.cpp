@@ -87,43 +87,7 @@ Game::Game()
 
 	//semilla generadora aleatoria
 	random_device rd; 
-	//motor
-	std::mt19937 gen(rd());
-
-	//Crear con while. .Supera el limite de las 30 -40 lineas por metodo 
-	//rango colores aleatorios
-	int color = uniform_int_distribution<int>(0, 6)(gen);
-	int color1 = uniform_int_distribution<int>(0, 6)(gen);
-	int color2 = uniform_int_distribution<int>(0, 6)(gen);
-	int color3 = uniform_int_distribution<int>(0, 6)(gen);
-
-	//rango posiciones horizontales 
-	int posX = uniform_int_distribution<int>(WINDOW_WIDTH/4, WINDOW_WIDTH-100)(gen);
-	int posX1 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
-	int posX2 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
-	int posX3 = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH-100)(gen);
-
-	//rango velocidades globo
-	float vel = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
-	float vel1 = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
-	float vel2 = uniform_real_distribution<float>(1.0f, 3.0f)(gen);
-	float vel3 = uniform_real_distribution<float>(1.0f,3.0f)(gen);
-
-		
-	//Creacion ocasional de globos:
-												//poscion de inicio, HEIGHT + 100 = por debajo del mapa
-												// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
-												//textura + color (randomizado)
-	Balloon* globo = new Balloon(Point2D<float>(posX, WINDOW_HEIGHT+100), Vector2D<float>(0, -1)*vel, getTexture(BALLOONS), color);
-	balloons.push_back(globo);
-	Balloon* globo2 = new Balloon(Point2D<float>(posX2, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)*vel1, getTexture(BALLOONS), color1);
-	balloons.push_back(globo2);
-	Balloon* globo3 = new Balloon(Point2D<float>(posX3, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)* vel2, getTexture(BALLOONS), color2);
-	balloons.push_back(globo3);
-	Balloon* globo4 = new Balloon(Point2D<float>(posX1, WINDOW_HEIGHT + 100), Vector2D<float>(0, -1)* vel3, getTexture(BALLOONS), color3);
-	balloons.push_back(globo4);
-
-
+	randomGenerator.seed(rd());
 }
 
 Game::~Game()
@@ -170,6 +134,13 @@ Game::update(float delta)
 	if (bow != nullptr) {
 		bow->update(delta);
 	}
+	//Temporizador para generar globos uno a uno de forma constante
+	spawnTimer += delta;
+	if (spawnTimer >= SPAWN_COOLDOWN) {
+		generateBalloon();
+		spawnTimer = 0.0f; //Reiniciamos contador
+	}
+
 	//Flechas
 	//bucle inverso para borrar de forma segura
 	for (auto it = arrows.begin(); it != arrows.end(); ) {
@@ -208,9 +179,6 @@ Game::run()
 		render();
 
 		//DELAY
-		// PUNTERO GAME A BOW PARA ACCEDER A CONSTANTE
-		// HANDLE EVENTS SIMPLEMENTE SE LLAMA AL DE BOW 
-		// NO MEZCLAR CODIGO 
 		Uint32 frameTime = SDL_GetTicks() - startTime;
 		if (frameTime < FRAME_PERIOD) {
 			SDL_Delay(FRAME_PERIOD - frameTime);
@@ -234,6 +202,26 @@ Game::handleEvents()
 			bow->handleEvent(event);
 		}
 	}
+}
+
+void
+Game::generateBalloon() {
+	//Elementos random
+	// Posicion, color y velocidad
+	int posX = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH - 100)(randomGenerator);
+	int color = uniform_int_distribution<int>(0, 6)(randomGenerator);
+	float vel = uniform_real_distribution<float>(1.5f, 4.0f)(randomGenerator);
+
+	//Instancia globo
+	//poscion de inicio, HEIGHT + 100 = por debajo del mapa
+	// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
+	//textura + color (randomizado)
+	Balloon* globo = new Balloon(Point2D<float>(posX, WINDOW_HEIGHT + 100),
+		Vector2D<float>(0, -1) * vel, 
+		getTexture(BALLOONS), 
+		color);
+
+	balloons.push_back(globo);
 }
 
  bool
