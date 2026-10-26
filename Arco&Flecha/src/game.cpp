@@ -1,6 +1,6 @@
 //SOlucion:
-//Cambiar Directorio de trabajo:C:\Users\kenai\Desktop\TPVPractica1\Arco&Flecha\bin\
-
+//Cambiar Directorio de trabajo:
+//: Solucion definitiva: $(ProjectDir)bin
 //Actual:
 //Anterior:$(ProjectDir)
 
@@ -9,7 +9,8 @@
 //Conjunto de herramientas de la plataforma: v145 for Microsoft C++ 
 
 #include "game.h"
-#include <iostream>
+#include <iostream> //consola
+#include <fstream> //lector archivo
 #include <string>
 
 #include <SDL3_image/SDL_image.h>
@@ -45,9 +46,55 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 };
 
+void
+Game::loadLevel() {
+	std::ifstream file("../assets/levels/1.txt");
+
+	//Excepcion a quitar
+	if (!file.is_open()) {
+		std::cerr << "Error: No se pudo abrir el archivo de configuracion." << std::endl;
+		return; // Si falla, se quedan los valores por defecto
+	}
+
+	string lector;
+	while (file >> lector) {
+		if (lector[0] == '#') {
+			//ignorar
+			file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else if (lector == "arrows") {
+			file >> initialArrows;
+		}
+		else if (lector == "baldelay") {
+			file >> baldelay;
+		}
+		else if (lector == "goal") {
+			file >> goal;
+		}
+		else if (lector == "balpoints") {
+			file >> balPoints;
+		}
+		else if (lector == "bgcolor") {
+			file >> r;
+			file >> g;
+			file >> b;
+		}
+		else {
+			// Palabra clave no reconocida: ignoramos el resto de la línea
+			file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+	file.close();
+	//cooldown cargado al temporizador
+	spawnTimer = baldelay;
+}
+
 Game::Game()
   : exit(false), score(0)
 {
+	//Carga archivo
+	loadLevel();
+
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
 		throw "SDL_Init: "s + SDL_GetError();
@@ -84,7 +131,7 @@ Game::Game()
 	
 	// TODO: crear los objetos del juego
 	//Creamos objeto arco
-	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),10, getTexture(BOW), this);
+	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),initialArrows, getTexture(BOW), this);
 
 	//semilla generadora aleatoria
 	random_device rd; 
@@ -116,7 +163,8 @@ Game::~Game()
 void
 Game::render() const
 {
-	SDL_SetRenderDrawColor(renderer, 0, 170, 85, 0);
+	//0, 170, 85
+	SDL_SetRenderDrawColor(renderer, r, g, b, 0);
 	SDL_RenderClear(renderer);
 
 	// TODO
@@ -138,10 +186,16 @@ Game::update(float delta)
 		bow->update(delta);
 	}
 	//Temporizador para generar globos uno a uno de forma constante
-	spawnTimer += delta;
-	if (spawnTimer >= SPAWN_COOLDOWN) {
+	//spawnTimer += delta;
+	//if (spawnTimer >= SPAWN_COOLDOWN) {
+	//	generateBalloon();
+	//	spawnTimer = 0.0f; //Reiniciamos contador
+	//}
+
+	spawnTimer -= FRAME_PERIOD;
+	if (spawnTimer <= 0) {
 		generateBalloon();
-		spawnTimer = 0.0f; //Reiniciamos contador
+		spawnTimer = baldelay;
 	}
 
 	//Flechas
@@ -162,7 +216,7 @@ Game::update(float delta)
 		if (!(*it)->update(delta)) {
 			//Si ha sido porque ha explotado
 			if ((*it)->getterExplotado()) {
-				score += 100;
+				score += balPoints; //puntuacion por globo
 			}
 			delete* it;
 			it = balloons.erase(it);
@@ -254,6 +308,13 @@ Game::imprimirResult() {
 
 			exit = true; // Rompe el bucle del Game::run() y cierra el juego limpiamente
 		}
+		if (goal != 0 && score >= goal) {
+			cout << "\n" << endl;
+			cout << "HAS GANADO. FIN DEL JUEGO" << endl;
+			cout << "Has llegado al goal de " << goal << " puntos" << endl;
+
+			exit = true;
+		}
 	}
 }
 
@@ -291,6 +352,7 @@ Game::imprimirScore() const{
 		}
 	}
 }
+
 
  bool
  Game::checkCollision(const Rectangle& rect)

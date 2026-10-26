@@ -23,7 +23,7 @@ private:
 	//Dimensiones 
 	Rectangle tam;
 	//numero flechas
-	int flechas = 10; 
+	int flechas = 5; 
 	//Velocidad escalar
 	float velocidadEscalar = 300.0f;
 

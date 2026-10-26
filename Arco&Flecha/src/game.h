@@ -64,8 +64,20 @@ private:
 	//Globos
 	vector<Balloon*> balloons; //Vector dinamico de globos
 	mt19937 randomGenerator;	//motor aletaorio
-	float spawnTimer = 0.0f;	//Cronometro tiempo para globos
-	static constexpr float SPAWN_COOLDOWN = 0.5f; //Frecuencia de generacion
+	//float spawnTimer = 0.0f;	//Cronometro tiempo para globos
+	//static constexpr float SPAWN_COOLDOWN = 0.5f; //Frecuencia de generacion
+	
+	//Atributos de lectura de archivo
+	int initialArrows = 8;
+	int baldelay = 1000; //delay en milisegundos
+	int spawnTimer = 0; //cronometro en milisegundos
+	int goal = 0;		//puntos para superar nivel
+	int balPoints = 20; //puntos por globo
+
+	int r = 0;//color fondo
+	int g = 0;
+	int b = 0; 
+
 
 	//Metodo auxiliar para generar globos
 	void generateBalloon();
@@ -75,10 +87,10 @@ private:
 	//Metodo auxiliar para imprimir Puntuacion en el juego
 	void imprimirScore() const;
 
-	//Puntuacion
+	void loadLevel();
+
+	//Puntuacion que se actualiza
 	int score = 0;
-
-
 
 public:
 	Game();
