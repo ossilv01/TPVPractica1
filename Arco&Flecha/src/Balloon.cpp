@@ -13,15 +13,15 @@ void Balloon::render()const {
 
 	//V.1.0 static cas
 	
-	int col = 0;
+	/*int col = 0;
 	if (explotado) {
 		col = static_cast<int>(frameActual);
 		if (col < 1) col = 1;
 		if (col > 5) col = 5;
 	}
 
-	texture->renderFrame(anim, fil, col);
-	//texture->renderFrame(anim, fil, columnaActual);
+	texture->renderFrame(anim, fil, col);*/
+	texture->renderFrame(anim, fil, columnaActual);
 
 }
 
@@ -42,7 +42,7 @@ bool Balloon::update(float delta) {
 	}
 	else {
 		//V.2
-		/*timerAnimation += delta;
+		timerAnimation += delta;
 		if (timerAnimation >= TIEMPO_FRAME) {
 			columnaActual++;
 			timerAnimation = 0.0f;
@@ -50,13 +50,13 @@ bool Balloon::update(float delta) {
 			if (columnaActual > 5) {
 					return false;
 			}
-		}*/
+		}
 
 		//V.1
-		frameActual += VEL_ANIMACION * delta;
-		if (frameActual >= 6.0f) {
-			return false; // se acabo la animación
-		}
+		//frameActual += VEL_ANIMACION * delta;
+		//if (frameActual >= 6.0f) {
+		//	return false; // se acabo la animación
+		//}
 	}
 	return true; 
 }

@@ -9,8 +9,10 @@
 //Conjunto de herramientas de la plataforma: v145 for Microsoft C++ 
 
 #include "game.h"
-#include <iostream> //consola
-#include <fstream> //lector archivo
+//consola
+#include <iostream> 
+//lector archivo
+#include <fstream> 
 #include <string>
 
 #include <SDL3_image/SDL_image.h>
@@ -19,9 +21,10 @@
 #include "Arrow.h"
 #include "Balloon.h"
 #include "texture.h"
-
-#include <random> //semilla
-#include <ctime>; // time() 
+//semilla
+#include <random> 
+// time() 
+#include <ctime>; 
 using namespace std;
 
 // Constantes
@@ -48,7 +51,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/2.txt");
+	std::ifstream file("../assets/levels/1.txt");
 
 	if (!file.is_open()) {
 		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
@@ -64,34 +67,26 @@ Game::loadLevel() {
 			if (!(file >> initialArrows)) {
 				throw string("Error: formato invalido para 'arrows' en archivo de nivel.");
 			}
-			//file >> initialArrows;
-
 		}
 		else if (lector == "baldelay") {
 			if (!(file >> baldelay)) {
 				throw string("Error: formato invalido para 'baldelay' en archivo de nivel");
 			}
-			//file >> baldelay;
 		}
 		else if (lector == "goal") {
 			if (!(file >> goal)) {
 				throw string("Error: formato invalido para 'goal' en archivo de nivel");
 			}
-			//file >> goal;
 		}
 		else if (lector == "balpoints") {
 			if (!(file >> balPoints)) {
 				throw string("Error: formato invalido para 'balpoints' en archivo de nivel");
 			}
-			//file >> balPoints;
 		}
 		else if (lector == "bgcolor") {
 			if (!(file >> r >> g >> b)) {
 				throw string("Error: formato invalido para 'bgcolor' en archivo de nivel.");
 			}
-			//file >> r;
-			//file >> g;
-			//file >> b;
 		}
 		else {
 			// Palabra clave no reconocida: ignoramos el resto de la línea
@@ -205,12 +200,6 @@ Game::update(float delta)
 	if (bow != nullptr) {
 		bow->update(delta);
 	}
-	//Temporizador para generar globos uno a uno de forma constante
-	//spawnTimer += delta;
-	//if (spawnTimer >= SPAWN_COOLDOWN) {
-	//	generateBalloon();
-	//	spawnTimer = 0.0f; //Reiniciamos contador
-	//}
 
 	spawnTimer -= FRAME_PERIOD;
 	if (spawnTimer <= 0) {

@@ -8,7 +8,7 @@
 #include <random>
 
 #include "rectangle.h"
-using namespace std;
+//using namespace std;
 // Declaraciones anticipadas
 class Texture;
 class Bow;
@@ -60,10 +60,10 @@ private:
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
 	Bow* bow = nullptr; // puntero a arco
-	vector<Arrow*> arrows; //Vector dinamico flechas
+	std::vector<Arrow*> arrows; //Vector dinamico flechas
 	//Globos
-	vector<Balloon*> balloons; //Vector dinamico de globos
-	mt19937 randomGenerator;	//motor aletaorio
+	std::vector<Balloon*> balloons; //Vector dinamico de globos
+	std::mt19937 randomGenerator;	//motor aletaorio
 	//float spawnTimer = 0.0f;	//Cronometro tiempo para globos
 	//static constexpr float SPAWN_COOLDOWN = 0.5f; //Frecuencia de generacion
 	

@@ -1,0 +1,15 @@
+Realizado por Óscar Silva Urbina y Santiago Salto Molodojen
+
+Cosas que comentar: 
+Me sale el aviso de "La raíz del directorio seleccionado no contiene ninguna solución de Visual Studio ni un archivo CMakeLists.txt."
+Me imagino que debe ser un error nuestro de la plantilla, pero aun así, si en Proyecto -> Propiedades-> Depuración -> Directorio de trabajo, es escribe: 
+"$(ProjectDir)bin" Funciona y compila el proyecto
+
+Los errores de "extra tokens at end of #include directive", se deben a causa de comentarios para indicar que función hacen
+luego en el proyecto
+
+El método de handleEvent de Bow esta rozando al limite (41), pero quitar alguna linea significaría que no funcionaria,
+por lo tanto luego en la revisión esperamos ver si realmente hicimos ese metodo correctamente y como se podría mejorar en 
+érroneo. Respecto a los demás metodos de loadlevel() y update() de game se trata de espacio y comentarios
+
+A parte de ello, el juego funciona correctamente

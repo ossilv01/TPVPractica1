@@ -113,6 +113,6 @@ int Bow::getFlechas() const {
 	return flechas;
 }
 
-Point2D<float> Bow::getPosition() {
+Point2D<float> Bow::getPosition() const {
 	return tam.getTopLeftCorner();
 }

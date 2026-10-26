@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 	
 
 	// TODO: manejar excepciones
-	catch (const string& e) {
-		cout << "ERROR CRITICO: " << e << endl;
+	catch (const std::string& e) {
+		std::cout << "ERROR CRITICO: " << e << std::endl;
 		return 1;
 	}
 	return 0;

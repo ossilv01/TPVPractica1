@@ -46,7 +46,7 @@ public:
 
 	//Producto escalar
 	//Devuelve un numero tipo T (por definicion de las mates) 
-	T operator*(const Vector2D& otro) {
+	T operator*(const Vector2D& otro) const{
 		return { (x * otro.x) + (y * otro.y) };
 	}
 

@@ -1,3 +1,4 @@
+
 #include "SDL3/SDL.h"
 #include "texture.h"
 #include "vector2D.h"
@@ -42,7 +43,7 @@ public:
 	bool canShoot() const;
 	void Shoot();
 	//getter de Point2D
-	Point2D <float> getPosition();
+	Point2D <float> getPosition() const;
 
 };
 
