@@ -113,7 +113,6 @@ Game::Game()
 	                                 WINDOW_WIDTH, WINDOW_HEIGHT,
 	                                 0, &window, &renderer))
 		throw "window or renderer: "s + SDL_GetError();
-		
 	// Carga las texturas al inicio
 	try {
 		textures.fill(nullptr);
@@ -129,6 +128,7 @@ Game::Game()
 			}
 		}
 	}
+
 	catch (const string& e) {
 		// TODO: liberar la memoria reservada
 		for (auto tex : textures) {
@@ -252,6 +252,8 @@ Game::run()
 		render();
 
 		//DELAY
+		//Vemos cuanto ha tardado el frame
+		//SI ha tardado menos del objetivo dormimos el procesador el tiempo restante
 		Uint32 frameTime = SDL_GetTicks() - startTime;
 		if (frameTime < FRAME_PERIOD) {
 			SDL_Delay(FRAME_PERIOD - frameTime);
