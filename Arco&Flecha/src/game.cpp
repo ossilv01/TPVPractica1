@@ -308,6 +308,7 @@ Game::imprimirResult() {
 
 			exit = true; // Rompe el bucle del Game::run() y cierra el juego limpiamente
 		}
+		// Superar juego en caso de que hay un goal que superar
 		if (goal != 0 && score >= goal) {
 			cout << "\n" << endl;
 			cout << "HAS GANADO. FIN DEL JUEGO" << endl;

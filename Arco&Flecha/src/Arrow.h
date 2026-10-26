@@ -13,6 +13,7 @@ private:
 
 	static constexpr float anchura = 404.0f/9;
 	static constexpr float altura = 82.0f/9;
+	static constexpr float anchoPunta = 20.0f;
 
 	//Puntero textura
 	Texture* tex = nullptr; 
@@ -28,6 +29,9 @@ private:
 
 	//velocidad escalar:
 	float Velocidad = 500.0f;
+
+	//grosor collider punta flecha
+
 
 public:
 	//Constructor

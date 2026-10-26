@@ -69,7 +69,7 @@ private:
 	
 	//Atributos de lectura de archivo
 	int initialArrows = 8;
-	int baldelay = 1000; //delay en milisegundos
+	int baldelay = 30; //delay en milisegundos
 	int spawnTimer = 0; //cronometro en milisegundos
 	int goal = 0;		//puntos para superar nivel
 	int balPoints = 20; //puntos por globo
