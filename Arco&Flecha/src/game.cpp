@@ -21,7 +21,7 @@
 #include "texture.h"
 
 #include <random> //semilla
-#include <ctime>; // time()
+#include <ctime>; // time() 
 using namespace std;
 
 // Constantes
@@ -48,46 +48,61 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/1.txt");
+	std::ifstream file("../assets/levels/2.txt");
 
-	//Excepcion a quitar
 	if (!file.is_open()) {
-		std::cerr << "Error: No se pudo abrir el archivo de configuracion." << std::endl;
-		return; // Si falla, se quedan los valores por defecto
+		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
 	}
 
 	string lector;
 	while (file >> lector) {
 		if (lector[0] == '#') {
-			//ignorar
-			file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			//ignorar comentarios #
+			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else if (lector == "arrows") {
-			file >> initialArrows;
+			if (!(file >> initialArrows)) {
+				throw string("Error: formato invalido para 'arrows' en archivo de nivel.");
+			}
+			//file >> initialArrows;
+
 		}
 		else if (lector == "baldelay") {
-			file >> baldelay;
+			if (!(file >> baldelay)) {
+				throw string("Error: formato invalido para 'baldelay' en archivo de nivel");
+			}
+			//file >> baldelay;
 		}
 		else if (lector == "goal") {
-			file >> goal;
+			if (!(file >> goal)) {
+				throw string("Error: formato invalido para 'goal' en archivo de nivel");
+			}
+			//file >> goal;
 		}
 		else if (lector == "balpoints") {
-			file >> balPoints;
+			if (!(file >> balPoints)) {
+				throw string("Error: formato invalido para 'balpoints' en archivo de nivel");
+			}
+			//file >> balPoints;
 		}
 		else if (lector == "bgcolor") {
-			file >> r;
-			file >> g;
-			file >> b;
+			if (!(file >> r >> g >> b)) {
+				throw string("Error: formato invalido para 'bgcolor' en archivo de nivel.");
+			}
+			//file >> r;
+			//file >> g;
+			//file >> b;
 		}
 		else {
 			// Palabra clave no reconocida: ignoramos el resto de la línea
-			file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 	}
 	file.close();
 	//cooldown cargado al temporizador
 	spawnTimer = baldelay;
 }
+
 
 Game::Game()
   : exit(false), score(0)
@@ -111,10 +126,15 @@ Game::Game()
 
 		for (size_t i = 0; i < textures.size(); i++) {
 			auto [name, nrows, ncols] = textureList[i];
+			string fullPath = imgRoot + name;
+
 			textures[i] = new Texture(renderer, (imgRoot + name).c_str(), nrows, ncols);
+			if (textures[i] == nullptr) {
+				throw string("Error: Fichero de imagen no encontrado o valido para:" + fullPath);
+			}
 		}
 	}
-	catch (...) {
+	catch (const string& e) {
 		// TODO: liberar la memoria reservada
 		for (auto tex : textures) {
 			if (tex != nullptr)

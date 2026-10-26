@@ -9,9 +9,15 @@
 
 int main(int argc, char* argv[])
 {
-	Game().run();
+	try {
+		Game().run();
+	}
+	
 
 	// TODO: manejar excepciones
-
+	catch (const string& e) {
+		cout << "ERROR CRITICO: " << e << endl;
+		return 1;
+	}
 	return 0;
 }
