@@ -12,8 +12,6 @@ int main(int argc, char* argv[])
 	try {
 		Game().run();
 	}
-	
-
 	// TODO: manejar excepciones
 	catch (const std::string& e) {
 		std::cout << "ERROR CRITICO: " << e << std::endl;

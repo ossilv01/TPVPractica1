@@ -10,17 +10,6 @@ Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int c
 void Balloon::render()const {
 	SDL_FRect anim = dimension.to_sdl();
 	int fil = color;
-
-	//V.1.0 static cas
-	
-	/*int col = 0;
-	if (explotado) {
-		col = static_cast<int>(frameActual);
-		if (col < 1) col = 1;
-		if (col > 5) col = 5;
-	}
-
-	texture->renderFrame(anim, fil, col);*/
 	texture->renderFrame(anim, fil, columnaActual);
 
 }
@@ -51,12 +40,6 @@ bool Balloon::update(float delta) {
 					return false;
 			}
 		}
-
-		//V.1
-		//frameActual += VEL_ANIMACION * delta;
-		//if (frameActual >= 6.0f) {
-		//	return false; // se acabo la animación
-		//}
 	}
 	return true; 
 }

@@ -29,11 +29,23 @@ public:
 	static constexpr int WINDOW_HEIGHT = 600;
 
 	//Constantes texto puntuacion: 
-	static constexpr float DIGIT_WIDTH = 24.0F;
-	static constexpr float  DIGIT_HEIGHT = 32.0F;
+	static constexpr float DIGIT_WIDTH = 24.0f;
+	static constexpr float  DIGIT_HEIGHT = 32.0f;
+	static constexpr float  DIGIT_MARGIN_PLUS = 2.0f;
 	static constexpr float  DIGIT_X = WINDOW_WIDTH- DIGIT_WIDTH- 20.0f;
 	static constexpr float  DIGIT_Y = 20;
 
+	//Posicion Inicial Arco: 
+	static constexpr float BOW_X = 10.0f;
+	static constexpr float BOW_Y = WINDOW_HEIGHT / 2 - 50;
+
+	//Posicion Globos: 
+	static constexpr float BALLOON_Y = WINDOW_HEIGHT + 100;
+	static constexpr float BALLOON_X_MIN = WINDOW_WIDTH / 4;
+		static constexpr float BALLOON_X_MAX = WINDOW_WIDTH - 100;
+	//Generacion globos: 
+	static constexpr float VEL_MIN = 1.5f;
+	static constexpr float VEL_MAX = 4.0f;
 
 
 	enum TextureName

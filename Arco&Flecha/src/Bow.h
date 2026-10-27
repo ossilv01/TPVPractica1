@@ -8,7 +8,6 @@ class Game;
 class Bow
 {
 private:
-
 	//dimensiones
 	static constexpr float altura = 100.0f;
 	static constexpr float anchura = 100.0f;
@@ -30,6 +29,7 @@ private:
 
 
 public:
+
 	//Constructor:
 	Bow(Vector2D<float>, Point2D<float>, int , Texture*, Game*);
 	//Metodos

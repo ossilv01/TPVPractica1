@@ -51,7 +51,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/2.txt");
+	std::ifstream file("../assets/levels/1.txt");
 
 	if (!file.is_open()) {
 		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
@@ -146,7 +146,7 @@ Game::Game()
 	
 	// TODO: crear los objetos del juego
 	//Creamos objeto arco
-	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(10, 250),initialArrows, getTexture(BOW), this);
+	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y),initialArrows, getTexture(BOW), this);
 
 	//semilla generadora aleatoria
 	random_device rd; 
@@ -283,15 +283,15 @@ void
 Game::generateBalloon() {
 	//Elementos random
 	// Posicion, color y velocidad
-	int posX = uniform_int_distribution<int>(WINDOW_WIDTH / 4, WINDOW_WIDTH - 100)(randomGenerator);
+	int posX = uniform_int_distribution<int>(BALLOON_X_MIN, BALLOON_X_MAX)(randomGenerator);
 	int color = uniform_int_distribution<int>(0, 6)(randomGenerator);
-	float vel = uniform_real_distribution<float>(1.5f, 4.0f)(randomGenerator);
+	float vel = uniform_real_distribution<float>(VEL_MIN, VEL_MAX)(randomGenerator);
 
 	//Instancia globo
 	//poscion de inicio, HEIGHT + 100 = por debajo del mapa
 	// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
 	//textura + color (randomizado)
-	Balloon* globo = new Balloon(Point2D<float>(posX, WINDOW_HEIGHT + 100),
+	Balloon* globo = new Balloon(Point2D<float>(posX, BALLOON_Y),
 		Vector2D<float>(0, -1) * vel, 
 		getTexture(BALLOONS), 
 		color);
@@ -359,7 +359,7 @@ Game::imprimirScore() const{
 			digitsTex->renderFrame(destRect, 0, digit);
 
 			// Desplazamos la posición X hacia la izquierda para el siguiente dígito
-			currentX -= (digitWidth + 2.0f);
+			currentX -= (digitWidth + DIGIT_MARGIN_PLUS);
 			tempScore /= 10; // Eliminamos el último dígito ya pintado, 100 -> 10s
 		}
 	}
