@@ -51,7 +51,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/1.txt");
+	std::ifstream file("../assets/levels/2.txt");
 
 	if (!file.is_open()) {
 		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
@@ -208,7 +208,7 @@ Game::update(float delta)
 	}
 
 	//Flechas
-	//bucle inverso para borrar de forma segura
+	//bucle para borrar de forma segura
 	for (auto it = arrows.begin(); it != arrows.end(); ) {
 		if (!(*it)->update(delta)) {
 			delete* it;            // Liberamos memoria de la flecha
@@ -218,6 +218,25 @@ Game::update(float delta)
 			++it;
 		}
 	}
+
+	////bucle inverso de verdad
+	//for (int i = arrows.size() - 1; i >= 0; --i) {
+	//	if (!arrows[i]->update(delta)) {
+	//		delete arrows[i];
+	//		arrows.erase(arrows.begin() + i); // Al ir al revés, no desordena los índices anteriores
+	//	}
+	//}
+
+	//bucle normal sin .begin () y .end() 
+	//for (int i = 0; i < arrows.size();) {
+	//	if (!arrows[i]->update(delta)) {
+	//		delete arrows[i];
+	//		arrows.erase(arrows.begin() + i);
+	//	}
+	//	else {
+	//		i++;
+	//	}
+	//}
 
 	// Globos
 	for (auto it = balloons.begin(); it != balloons.end(); ) {
@@ -234,6 +253,8 @@ Game::update(float delta)
 			++it;
 		}
 	}
+
+
 	//Impresion en consola:
 	imprimirResult();
 }
