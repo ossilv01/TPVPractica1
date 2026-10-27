@@ -33,7 +33,8 @@ void Bow::handleEvent(const SDL_Event& event) {
 				Point2D<float> arcoPos = getPosition();   //Punto referencia de flecha respecto a Arco (esquina)
 				//armed = false;
 				float a = tam.getHeight();		//100.0f =altura arco 
-				float b = Arrow::altura; //altura flecha
+				float b = Arrow::altura;
+				//float b = Arrow::altura; //altura flecha
 				//altura flecha
 				float flechaY = arcoPos.getY() + (a/2.0f) - (b / 2.0f);  //Centrar flecha (Alto objeto Grande + Alto objeto) /2
 				Point2D<float> posCentro(arcoPos.getX(), flechaY); 		//Nuevo punto centrado:

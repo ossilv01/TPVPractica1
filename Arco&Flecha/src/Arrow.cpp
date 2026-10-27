@@ -28,7 +28,7 @@ bool Arrow::update(float delta) {
 
 															//grosor collider punta flecha
 	Point2D<float> posPunta(tam.getTopLeftCorner().getX() + tam.getWidth() - anchoPunta, tam.getTopLeftCorner().getY());
-	Rectangle colliderPunta(posPunta, anchoPunta, tam.getHeight());
+	Rectangle colliderPunta(posPunta, anchoPunta, anchoPunta);
 	//Colision globos:
 	//el tam esta puesto provisionalmente
 	//Detecta si ha habido impacto, pero la flecha sigue estando

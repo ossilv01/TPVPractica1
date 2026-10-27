@@ -35,9 +35,9 @@ public:
 	//Constructor
 	Arrow(Vector2D<float>, Point2D<float>, Texture*, Game* game);
 
-	static constexpr float anchura = 404.0f / 9;
-	static constexpr float altura = 82.0f / 9;
-	static constexpr float anchoPunta = 10.0f;
+	static constexpr float anchura = 404.0f / 4;
+	static constexpr float altura = 82.0f / 4;
+	static constexpr float anchoPunta = 5.0f;
 
 	void render() const;
 	bool update(float delta);
