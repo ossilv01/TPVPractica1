@@ -23,8 +23,11 @@
     <ClCompile Include="src\Balloon.cpp" />
     <ClCompile Include="src\Bow.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MobileObject.cpp" />
     <ClCompile Include="src\rectangle.cpp" />
+    <ClCompile Include="src\SceneObject.cpp" />
     <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,7 +35,10 @@
     <ClInclude Include="src\Balloon.h" />
     <ClInclude Include="src\Bow.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\MobileObject.h" />
     <ClInclude Include="src\rectangle.h" />
+    <ClInclude Include="src\SceneObject.h" />
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\vector2D.h" />
   </ItemGroup>

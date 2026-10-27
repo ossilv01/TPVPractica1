@@ -42,7 +42,7 @@ public:
 	//Posicion Globos: 
 	static constexpr float BALLOON_Y = WINDOW_HEIGHT + 100;
 	static constexpr float BALLOON_X_MIN = WINDOW_WIDTH / 4;
-		static constexpr float BALLOON_X_MAX = WINDOW_WIDTH - 100;
+	static constexpr float BALLOON_X_MAX = WINDOW_WIDTH - 100;
 	//Generacion globos: 
 	static constexpr float VEL_MIN = 1.5f;
 	static constexpr float VEL_MAX = 4.0f;
@@ -55,7 +55,6 @@ public:
 		BALLOONS,
 		DIGITS,
 		NUM_TEXTURES,
-
 	};
 
 private:

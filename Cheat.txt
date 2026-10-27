@@ -1,0 +1,6 @@
+Preguntas Entrevista: 
+¿Cómo habeis puesto el texto? 
+Animacion de globos (frames) CUIDADO /FRAMERATE
+Arrow
+Puntuacion
+
