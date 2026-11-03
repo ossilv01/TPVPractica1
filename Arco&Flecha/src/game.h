@@ -89,6 +89,7 @@ private:
 	int g = 0;
 	int b = 0; 
 
+	int ultimaCantidadFlechas = -1;
 
 	//Metodo auxiliar para generar globos
 	void generateBalloon();

@@ -51,7 +51,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/1.txt");
+	std::ifstream file("../assets/levels/2.txt");
 
 	if (!file.is_open()) {
 		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
@@ -201,10 +201,11 @@ Game::update(float delta)
 		bow->update(delta);
 	}
 
+	// Restamos los milisegundos fijos que dura cada frame gracias al SDL_Delay
 	spawnTimer -= FRAME_PERIOD;
 	if (spawnTimer <= 0) {
 		generateBalloon();
-		spawnTimer = baldelay;
+		spawnTimer = baldelay; // Se reinicia al delay dado 
 	}
 
 	//Flechas
@@ -265,7 +266,10 @@ Game::run()
 	Uint32 lastTime = SDL_GetTicks();
 	while (!exit) {
 		// TODO: implementar bucle del juego
+		//Medicion interna de Cuanto tarda en procesar el fotograma actual -> eventos, update y render
+		//Rendimiento PC
 		Uint32 startTime = SDL_GetTicks();
+		//Delta: Mide en tiempo real cuantos segundos pasaron desde la ultima vez que se actualizaron
 		float delta = (startTime - lastTime) / 1000.0f;
 		lastTime = startTime;
 		handleEvents();
@@ -275,8 +279,11 @@ Game::run()
 		//DELAY
 		//Vemos cuanto ha tardado el frame
 		//SI ha tardado menos del objetivo dormimos el procesador el tiempo restante
+//ejemplo: 1005 (tiempo actual en este instante, tras terminar tareas, update)	startTime = 1000 (tiempo que haya tardado justo al empezar las tareas)
 		Uint32 frameTime = SDL_GetTicks() - startTime;
+		//procesaria todo en 5 milisegundos, cuando en realidad el objetivo eran 33 milisegundos
 		if (frameTime < FRAME_PERIOD) {
+			//por lo tanto usamos delay de 28 milisegundos para no ir tan rapido
 			SDL_Delay(FRAME_PERIOD - frameTime);
 		}
 
@@ -324,7 +331,6 @@ void
 Game::imprimirResult() {
 	if (bow != nullptr) {
 		int flechasDisponibles = bow->getFlechas();
-		static int ultimaCantidadFlechas = -1; // Guarda el estado del fotograma anterior
 
 		// Solo imprimimos si el jugador ha disparado (el número cambió)
 		if (flechasDisponibles != ultimaCantidadFlechas) {

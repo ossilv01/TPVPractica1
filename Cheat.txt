@@ -1,6 +1,21 @@
 Preguntas Entrevista: 
-¿Cómo habeis puesto el texto? 
+¿Cómo habeis puesto el texto? Puntuacion (%10):
 Animacion de globos (frames) CUIDADO /FRAMERATE
-Arrow
-Puntuacion
+-> Ver otra forma de implementar esto, para poder ver mejora
++ Que realmente se entienda
+Collider flecha, y que hacen los metodos de getCollision
 
+Cuestiones rápidas:
+Como notifica a un globo que esta muerto
+Como es que la flecha se borra
+Como se calcula la posicion de la flecha
+Como se mueve el arco:
+	No se mueve infinitamente
+	GetKeyUp
+	Limites arriba y abajo (correspondientes a punta arriba y abajo) 
+	 
+Mencionar opcional hecho:
+Explicar como se ha realizado, como se lee de archivo y como 
+es que se termina el juego con "goal" 
+-------
+Estudiar POO, herencia y Polimorfismo

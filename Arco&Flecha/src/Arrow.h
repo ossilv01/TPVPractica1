@@ -28,9 +28,6 @@ private:
 	//velocidad escalar:
 	float Velocidad = 500.0f;
 
-	//grosor collider punta flecha
-
-
 public:
 	//Constructor
 	Arrow(Vector2D<float>, Point2D<float>, Texture*, Game* game);

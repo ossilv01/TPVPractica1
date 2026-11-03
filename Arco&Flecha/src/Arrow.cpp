@@ -25,7 +25,6 @@ bool Arrow::update(float delta) {
 	if (puntaX>= game->WINDOW_WIDTH) {
 		return false;
 	}
-
 															//grosor collider punta flecha
 	Point2D<float> posPunta(tam.getTopLeftCorner().getX() + tam.getWidth() - anchoPunta, tam.getTopLeftCorner().getY());
 	Rectangle colliderPunta(posPunta, anchoPunta, anchoPunta);
