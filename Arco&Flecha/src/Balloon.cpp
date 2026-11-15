@@ -1,9 +1,13 @@
 #include "Balloon.h"
-Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int color) :
+#include "game.h"
+
+Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int color, int puntos, Game* game) :
 	vel(dir),
 	texture(texture),
 	color(color),
-	dimension(pos, anchura, altura)
+	dimension(pos, anchura, altura),
+	puntos(puntos),
+	game(game)
 {
 }
 
@@ -30,7 +34,7 @@ bool Balloon::update(float delta) {
 		if ((posY + alto) < 0) return false;
 	}
 	else {
-		//V.2
+		//animacion
 		timerAnimation += delta;
 		if (timerAnimation >= TIEMPO_FRAME) {
 			columnaActual++;
@@ -51,11 +55,12 @@ bool Balloon::hit(const Rectangle& obj) {
 	
 	if (dimension.hasIntersection(obj)) {
 		explotado = true;
+		//añadimos puntos al score
+		if (game != nullptr) {
+			game->addScore(puntos);
+		}
 		return true;
 	}
 	return false;
 }
 
-bool Balloon::getterExplotado() const {
-	return explotado;
-}

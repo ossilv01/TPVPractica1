@@ -1,12 +1,16 @@
 #include "vector2D.h"
 #include "rectangle.h"
 #include "texture.h"
+class Game;
+
 class Balloon
 {
 private:
+	Game* game = nullptr; //puntero a game para sumar puntuacion
 	Vector2D<float> vel; //velocidad
 	int color;			//Indice fila textura
 	Texture* texture = nullptr; //Puntero a textura
+	int puntos;
 	Rectangle dimension;		
 	//constantes 
 	//velocidad
@@ -21,12 +25,12 @@ private:
 	int columnaActual = 0;
 	
 public:
-	//Constructor: pos incial ->Rectangle, velocidad, textura, color
-	Balloon(Point2D<float>, Vector2D<float>, Texture*, int);
+	//Constructor: pos incial ->Rectangle, velocidad, textura, color, puntos
+	Balloon(Point2D<float>, Vector2D<float>, Texture*, int, int, Game* game);
 	void render() const;
 	bool update(float delta);
 	bool hit(const Rectangle& obj);
-	bool getterExplotado() const;
+	//bool getterExplotado() const;
 
 };
 

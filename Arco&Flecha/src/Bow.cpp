@@ -30,16 +30,6 @@ void Bow::handleEvent(const SDL_Event& event) {
 			break;
 		case SDLK_D: case SDLK_RIGHT:
 			if (canShoot()) {
-				Point2D<float> arcoPos = getPosition();   //Punto referencia de flecha respecto a Arco (esquina)
-				//armed = false;
-				float a = tam.getHeight();		//100.0f =altura arco 
-				float b = Arrow::altura;
-				//float b = Arrow::altura; //altura flecha
-				//altura flecha
-				float flechaY = arcoPos.getY() + (a/2.0f) - (b / 2.0f);  //Centrar flecha (Alto objeto Grande + Alto objeto) /2
-				Point2D<float> posCentro(arcoPos.getX(), flechaY); 		//Nuevo punto centrado:
-				Arrow* newFlecha = new Arrow(Vector2D<float>(1, 0), posCentro,game->getTexture(Game::ARROW),game); //instanciamos flecha
-				game->addArrow(newFlecha);
 				Shoot();
 			}
 			break;
@@ -107,8 +97,20 @@ bool Bow::canShoot() const {
 }
 
 void Bow::Shoot() {
+	//Cambio de sprite y resta de flechas
 	armed = false;
 	if (flechas > 0) flechas--;
+
+	//Creacion y disparo de flecha
+	Point2D<float> arcoPos = getPosition();   //Punto referencia de flecha respecto a Arco (esquina)
+	//armed = false;
+	float a = tam.getHeight();		//100.0f =altura arco 
+	float b = Arrow::altura; //altura flecha
+	//altura flecha
+	float flechaY = arcoPos.getY() + (a / 2.0f) - (b / 2.0f);  //Centrar flecha (Alto objeto Grande + Alto objeto) /2
+	Point2D<float> posCentro(arcoPos.getX(), flechaY); 		//Nuevo punto centrado:
+	Arrow* newFlecha = new Arrow(Vector2D<float>(1, 0), posCentro, game->getTexture(Game::ARROW), game); //instanciamos flecha
+	game->addArrow(newFlecha);
 }
 
 int Bow::getFlechas() const {

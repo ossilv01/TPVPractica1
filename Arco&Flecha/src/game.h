@@ -99,7 +99,11 @@ private:
 	//Metodo auxiliar para imprimir Puntuacion en el juego
 	void imprimirScore() const;
 
+	//Lectura de archivo
 	void loadLevel();
+
+	//Limpieza texturas y sdl
+	void clean();
 
 	//Puntuacion que se actualiza
 	int score = 0;
@@ -120,6 +124,10 @@ public:
 	 //Metodo para instnaciar creacion flecha
 	 void addArrow(Arrow* arrow) {
 		 arrows.push_back(arrow);
+	 }
+
+	 void addScore(int points) {
+		 score += points;
 	 }
 };
 

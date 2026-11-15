@@ -24,7 +24,7 @@
 //semilla
 #include <random> 
 // time() 
-#include <ctime>; 
+#include <ctime> 
 using namespace std;
 
 // Constantes
@@ -51,7 +51,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 void
 Game::loadLevel() {
-	std::ifstream file("../assets/levels/2.txt");
+	std::ifstream file("../assets/levels/1.txt");
 
 	if (!file.is_open()) {
 		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
@@ -59,38 +59,38 @@ Game::loadLevel() {
 
 	string lector;
 	while (file >> lector) {
+		string error = " ";
+
 		if (lector[0] == '#') {
 			//ignorar comentarios #
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 		else if (lector == "arrows") {
-			if (!(file >> initialArrows)) {
-				throw string("Error: formato invalido para 'arrows' en archivo de nivel.");
-			}
+			file >> initialArrows;
+			error = lector;
 		}
 		else if (lector == "baldelay") {
-			if (!(file >> baldelay)) {
-				throw string("Error: formato invalido para 'baldelay' en archivo de nivel");
-			}
+			file >> baldelay;
+			error = lector;
 		}
 		else if (lector == "goal") {
-			if (!(file >> goal)) {
-				throw string("Error: formato invalido para 'goal' en archivo de nivel");
-			}
+			file >> goal;
+			error = lector;
 		}
 		else if (lector == "balpoints") {
-			if (!(file >> balPoints)) {
-				throw string("Error: formato invalido para 'balpoints' en archivo de nivel");
-			}
+			file >> balPoints;
+			error = lector;
 		}
 		else if (lector == "bgcolor") {
-			if (!(file >> r >> g >> b)) {
-				throw string("Error: formato invalido para 'bgcolor' en archivo de nivel.");
-			}
+			file >> r >> g >> b;
+			error = lector;
 		}
 		else {
 			// Palabra clave no reconocida: ignoramos el resto de la línea
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
+		}
+		if (!error.empty() && file.fail()) {
+			throw string("Error: formato invalido para '" + error + "' en archivo de nivel.");
 		}
 	}
 	file.close();
@@ -131,12 +131,7 @@ Game::Game()
 
 	catch (const string& e) {
 		// TODO: liberar la memoria reservada
-		for (auto tex : textures) {
-			if (tex != nullptr)
-			delete tex;
-			tex = nullptr;
-		}
-
+		clean();
 		throw; // relanza la excepción
 	}
 
@@ -153,26 +148,34 @@ Game::Game()
 	randomGenerator.seed(rd());
 }
 
-Game::~Game()
-{
-	// TODO: liberar la memoria reservada por la clase
+void Game::clean() {
+	
 	//Liberamos objeto bow y vectores objetos
 	if (bow != nullptr) {
 		delete bow;
 		bow = nullptr;
 	}
 	for (Arrow* a : arrows) delete a;
+	arrows.clear();
 	for (Balloon* b : balloons) delete b;
+	balloons.clear();
+
 	//Libera array texturas
 	for (Texture* texture : textures) {
 		if (texture != nullptr)
-		delete texture;
+			delete texture;
 		texture = nullptr;
 	}
-
+	//Liberamos elementos SDL
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
+
+Game::~Game()
+{
+	// TODO: liberar la memoria reservada por la clase
+	clean();
 }
 
 void
@@ -243,10 +246,6 @@ Game::update(float delta)
 	for (auto it = balloons.begin(); it != balloons.end(); ) {
 		//Muerto En general
 		if (!(*it)->update(delta)) {
-			//Si ha sido porque ha explotado
-			if ((*it)->getterExplotado()) {
-				score += balPoints; //puntuacion por globo
-			}
 			delete* it;
 			it = balloons.erase(it);
 		}
@@ -322,7 +321,9 @@ Game::generateBalloon() {
 	Balloon* globo = new Balloon(Point2D<float>(posX, BALLOON_Y),
 		Vector2D<float>(0, -1) * vel, 
 		getTexture(BALLOONS), 
-		color);
+		color,
+		balPoints,
+		this);
 
 	balloons.push_back(globo);
 }
