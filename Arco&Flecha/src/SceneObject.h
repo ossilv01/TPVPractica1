@@ -18,7 +18,8 @@ public:
 	{
 	}
 
-			//metodo virtual a overridaear) 
-	virtual bool hit(const Rectangle& rect);
+	//metodo virtual a overridaear) 
+	//false por defecto, quienes lo utilizan le cambiaran el valor
+	virtual bool hit(const Rectangle& rect) { return false; };
 };
 

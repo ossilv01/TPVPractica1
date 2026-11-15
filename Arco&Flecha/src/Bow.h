@@ -3,27 +3,32 @@
 #include "texture.h"
 #include "vector2D.h"
 #include "rectangle.h"
+#include "SceneObject.h"
 
 class Game;
-class Bow
+class Bow : public SceneObject
 {
 private:
 	//dimensiones
 	static constexpr float altura = 100.0f;
 	static constexpr float anchura = 100.0f;
+	
+	//heredamos: game, texture, position y dimension (rectangle)
 
-	//puntero a textura
-	Texture* tex = nullptr; 
-	//puntero a game
-	Game* game = nullptr;
+	////puntero a textura
+	//Texture* tex = nullptr; 
+	////puntero a game
+	//Game* game = nullptr;
+	////Dimensiones 
+	//Rectangle tam;
+
+	// Atributos exclusivos
 	//Armado o no
-	bool armed; 
+	bool armed;
 	//Direccion movimienot
 	Vector2D<float> dir;
-	//Dimensiones 
-	Rectangle tam;
 	//numero flechas
-	int flechas = 5; 
+	int numArrows = 5; 
 	//Velocidad escalar
 	float velocidadEscalar = 300.0f;
 
@@ -31,7 +36,7 @@ private:
 public:
 
 	//Constructor:
-	Bow(Vector2D<float>, Point2D<float>, int , Texture*, Game*);
+	Bow(Vector2D<float>, Point2D<float>, int, Texture*, Game*);
 	//Metodos
 	void handleEvent(const SDL_Event& event);
 	void render() const;

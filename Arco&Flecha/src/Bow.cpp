@@ -3,11 +3,9 @@
 #include "Arrow.h"
 
 Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura, Game* game) :
+	SceneObject(game, posicion, textura, anchura, altura),
 	dir(direccion),
-	flechas(arrows),
-	tex(textura),
-	tam(posicion, anchura, altura),
-	game(game),
+	numArrows(arrows),
 	armed(false)
 {
 }
@@ -24,7 +22,7 @@ void Bow::handleEvent(const SDL_Event& event) {
 			break;
 
 		case SDLK_A: case SDLK_LEFT:	
-			if (flechas > 0 && !armed) {
+			if (numArrows > 0 && !armed) {
 				armed = true;
 			}
 			break;
@@ -46,10 +44,11 @@ void Bow::handleEvent(const SDL_Event& event) {
 		}
 	}
 }
+//"dimension" y "texture", nombres del Rectangle y Texture* del padre "SceneObject"
 
 void Bow::render()const {
 	//Del RECTANGLE definido para tema Colliders y movimiento, lo transformamos en SDL_FRect
-	SDL_FRect anim = tam.to_sdl();
+	SDL_FRect anim = dimension.to_sdl();
 
 	//Cambio entre columna de frame: Armado y desarmado
 	int columna;
@@ -58,7 +57,7 @@ void Bow::render()const {
 	int fila = 0;
 
 	//Mediante el puntero a texture, accedemos al metodo render apropiado
-	tex->renderFrame(anim,fila,columna);
+	texture->renderFrame(anim,fila,columna);
 }
 
 // nuevo parametro para obtener Window_Height (se declara en game.cpp)
@@ -68,10 +67,10 @@ bool Bow::update(float delta) {
 	Vector2D<float> desplazamiento = dir * (velocidadEscalar * delta);
 
 	//Posicion actual esquina
-	Point2D<float> esquina = tam.getTopLeftCorner();
+	Point2D<float> esquina = dimension.getTopLeftCorner();
 
 	//tamaño altura arco
-	float altoArco = tam.getHeight();
+	float altoArco = dimension.getHeight();
 	//Actuación preventiva asumiendo Y tras el movimiento
 	float nextY = esquina.getY() + desplazamiento.getY();
 
@@ -86,7 +85,7 @@ bool Bow::update(float delta) {
 	}
 
 	//Metodo de Rectangle para tb acutalizar su posicion;
-	tam.move(desplazamiento);
+	dimension.move(desplazamiento);
 
 	//Nunca se """destruye""" el arco
 	return true;
@@ -99,12 +98,12 @@ bool Bow::canShoot() const {
 void Bow::Shoot() {
 	//Cambio de sprite y resta de flechas
 	armed = false;
-	if (flechas > 0) flechas--;
+	if (numArrows > 0) numArrows--;
 
 	//Creacion y disparo de flecha
 	Point2D<float> arcoPos = getPosition();   //Punto referencia de flecha respecto a Arco (esquina)
 	//armed = false;
-	float a = tam.getHeight();		//100.0f =altura arco 
+	float a = dimension.getHeight();		//100.0f =altura arco 
 	float b = Arrow::altura; //altura flecha
 	//altura flecha
 	float flechaY = arcoPos.getY() + (a / 2.0f) - (b / 2.0f);  //Centrar flecha (Alto objeto Grande + Alto objeto) /2
@@ -114,9 +113,9 @@ void Bow::Shoot() {
 }
 
 int Bow::getFlechas() const {
-	return flechas;
+	return numArrows;
 }
 
 Point2D<float> Bow::getPosition() const {
-	return tam.getTopLeftCorner();
+	return dimension.getTopLeftCorner();
 }

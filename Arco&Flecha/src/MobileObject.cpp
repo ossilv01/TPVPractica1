@@ -4,7 +4,6 @@
 
 
 bool MobileObject::update(float delta) {
-
-
-
+	//provisional
+	return false;
 }
