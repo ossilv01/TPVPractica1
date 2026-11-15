@@ -223,25 +223,6 @@ Game::update(float delta)
 		}
 	}
 
-	////bucle inverso de verdad
-	//for (int i = arrows.size() - 1; i >= 0; --i) {
-	//	if (!arrows[i]->update(delta)) {
-	//		delete arrows[i];
-	//		arrows.erase(arrows.begin() + i); // Al ir al revés, no desordena los índices anteriores
-	//	}
-	//}
-
-	//bucle normal sin .begin () y .end() 
-	//for (int i = 0; i < arrows.size();) {
-	//	if (!arrows[i]->update(delta)) {
-	//		delete arrows[i];
-	//		arrows.erase(arrows.begin() + i);
-	//	}
-	//	else {
-	//		i++;
-	//	}
-	//}
-
 	// Globos
 	for (auto it = balloons.begin(); it != balloons.end(); ) {
 		//Muerto En general
@@ -253,8 +234,6 @@ Game::update(float delta)
 			++it;
 		}
 	}
-
-
 	//Impresion en consola:
 	imprimirResult();
 }
@@ -318,6 +297,7 @@ Game::generateBalloon() {
 	//poscion de inicio, HEIGHT + 100 = por debajo del mapa
 	// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
 	//textura + color (randomizado)
+	//puntos por globo + puntero a Game
 	Balloon* globo = new Balloon(Point2D<float>(posX, BALLOON_Y),
 		Vector2D<float>(0, -1) * vel, 
 		getTexture(BALLOONS), 
