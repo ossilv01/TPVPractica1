@@ -1,32 +1,34 @@
 #include "vector2D.h"
 #include "rectangle.h"
 #include "texture.h"
+#include "MobileObject.h"
 
 //para evitar  dependencia circular
 class Game;
 
-class Arrow
+class Arrow : public MobileObject
 {
 
 private:
 	//dimensiones
 	//404.0f/9, 82.0f/9
 
+	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
 
 	//Puntero textura
-	Texture* tex = nullptr; 
+	//Texture* tex = nullptr; 
 
-	//Puntero a game para colisiones/Aprovechamos para variables publicas GAME
-	Game* game = nullptr;
+	////Puntero a game para colisiones/Aprovechamos para variables publicas GAME
+	//Game* game = nullptr;
 
-	//Dimensiones:
-	Rectangle tam;
+	////Dimensiones:
+	//Rectangle tam;
 
-	//Velocidad/Direccion movimiento: 
-	Vector2D <float> dir;
+	////Velocidad/Direccion movimiento: 
+	//Vector2D <float> dir;
 
 	//velocidad escalar:
-	float Velocidad = 500.0f;
+	static constexpr float Velocidad = 500.0f;
 
 public:
 	//Constructor
@@ -36,7 +38,7 @@ public:
 	static constexpr float altura = 82.0f / 4;
 	static constexpr float anchoPunta = 5.0f;
 
-	void render() const;
-	bool update(float delta);
+	void render() const override;
+	bool update(float delta) override;
 };
 

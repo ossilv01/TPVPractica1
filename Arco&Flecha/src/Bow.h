@@ -1,4 +1,3 @@
-
 #include "SDL3/SDL.h"
 #include "texture.h"
 #include "vector2D.h"
@@ -39,11 +38,13 @@ public:
 	Bow(Vector2D<float>, Point2D<float>, int, Texture*, Game*);
 	//Metodos
 	void handleEvent(const SDL_Event& event);
-	void render() const;
-	bool update(float delta);
+
+	//Metodos sobreescribir
+	void render() const override;
+	bool update(float delta) override;
+
 	//El equivalente a las vidas
 	int getFlechas() const;
-
 	//Metodos para disparo
 	bool canShoot() const;
 	void Shoot();
