@@ -1,12 +1,24 @@
 #include "vector2D.h"
 #include "rectangle.h"
-class SceneObject
+#include "texture.h"
+#include "GameObject.h"
+class SceneObject : public GameObject
 {
-private: 
-	Point2D <float> pos; 
-	Rectangle a; 
+private:
+
+protected:
+	Point2D <float> position; 
+	Texture* texture = nullptr;
+	Rectangle dimension;
 
 public: 
-	bool hit(const Rectangle&);
+
+	SceneObject(Game* game, Point2D<float> pos, Texture* tex, float width, float height)
+		: GameObject(game), position(pos), texture(tex), dimension(pos, width, height) 
+	{
+	}
+
+			//metodo virtual a overridaear) 
+	virtual bool hit(const Rectangle& rect);
 };
 

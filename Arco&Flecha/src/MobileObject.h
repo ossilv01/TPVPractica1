@@ -1,11 +1,18 @@
 #include "vector2D.h"
-class MobileObject
+#include "SceneObject.h"
+
+class MobileObject : public SceneObject
 {
-private: 
-	
+protected:
+	Vector2D<float> velocidad; 
 
 public: 
-	void update();
+	MobileObject(Game* game, Point2D<float> pos, Vector2D<float> vel, Texture* tex, float width, float height)
+		//constructor clase padre + nuevo atributo propio
+		: SceneObject(game, pos, tex, width, height), velocidad(vel)
+	{ }
+
+	bool update(float delta) override;
 
 };
 
