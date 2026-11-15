@@ -1,17 +1,24 @@
 #include "vector2D.h"
 #include "rectangle.h"
 #include "texture.h"
+#include "MobileObject.h"
 class Game;
 
-class Balloon
+class Balloon : public MobileObject
 {
 private:
-	Game* game = nullptr; //puntero a game para sumar puntuacion
-	Vector2D<float> vel; //velocidad
+
+	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
+
+	//Game* game = nullptr; //puntero a game para sumar puntuacion
+	//Vector2D<float> vel; //velocidad
+	//Texture* texture = nullptr; //Puntero a textura
+	//Rectangle dimension;	
+
+	//atributos propios
 	int color;			//Indice fila textura
-	Texture* texture = nullptr; //Puntero a textura
 	int puntos;
-	Rectangle dimension;		
+
 	//constantes 
 	//velocidad
 	static constexpr float VelEscalar = 100.0f;
@@ -27,9 +34,9 @@ private:
 public:
 	//Constructor: pos incial ->Rectangle, velocidad, textura, color, puntos
 	Balloon(Point2D<float>, Vector2D<float>, Texture*, int, int, Game* game);
-	void render() const;
-	bool update(float delta);
-	bool hit(const Rectangle& obj);
+	void render() const override;
+	bool update(float delta) override;
+	bool hit(const Rectangle& obj) override;
 	//bool getterExplotado() const;
 
 };

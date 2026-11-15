@@ -2,12 +2,15 @@
 #include "game.h"
 
 Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int color, int puntos, Game* game) :
-	vel(dir),
-	texture(texture),
+	/*vel(dir),
+	texture(texture),*/
+	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
+								//
+	MobileObject(game, pos, dir * VelEscalar, texture, anchura, altura),
 	color(color),
-	dimension(pos, anchura, altura),
-	puntos(puntos),
-	game(game)
+	//dimension(pos, anchura, altura),
+	puntos(puntos)
+	//game(game)
 {
 }
 
@@ -22,8 +25,10 @@ void Balloon::render()const {
 bool Balloon::update(float delta) {
 
 	if (!explotado) {
-		Vector2D movimiento = vel * (VelEscalar * delta);
-		dimension.move(movimiento);
+		/*Vector2D movimiento = speed * (VelEscalar * delta);
+		dimension.move(movimiento);*/
+		//Esta logica de movimiento esta metida ahora en el update de MobileObject
+		MobileObject::update(delta);
 
 		//Esquina superior del rectangulo
 		float posY = dimension.getTopLeftCorner().getY();

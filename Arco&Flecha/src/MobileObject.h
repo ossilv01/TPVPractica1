@@ -1,3 +1,4 @@
+#pragma once
 #include "vector2D.h"
 #include "SceneObject.h"
 
