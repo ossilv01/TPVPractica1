@@ -101,6 +101,10 @@ Game::loadLevel(int level) {
 			file >> numButterflies;
 			error = lector;
 		}
+		else if (lector == "balspeed") {
+			file >> balspeed;
+			error = lector;
+		}
 		else {
 			// Palabra clave no reconocida: ignoramos el resto de la línea
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
@@ -314,8 +318,8 @@ Game::generateBalloon() {
 	// Posicion, color y velocidad
 	int posX = uniform_int_distribution<int>(BALLOON_X_MIN, BALLOON_X_MAX)(randomGenerator);
 	int color = uniform_int_distribution<int>(0, 6)(randomGenerator);
-	float vel = uniform_real_distribution<float>(VEL_MIN, VEL_MAX)(randomGenerator);
-
+	float factorAleatorio = uniform_real_distribution<float>(VEL_MIN, VEL_MAX)(randomGenerator);
+	float vel = (balspeed * 1000.0f) * factorAleatorio; //0.2 *1000 = 200 *factor aleatorio
 	//Instancia globo
 	//poscion de inicio, HEIGHT + 100 = por debajo del mapa
 	// vector(0,-1) = dirección eje Y negativa (hacia arriba) * velocidad
@@ -343,7 +347,7 @@ Game::generateButterfly() {
 	Butterfly* mariposa = new Butterfly(this, Point2D<float>(posX, posY),
 		dir,
 		getTexture(BUTTERFLY),
-		50
+		butterflyPoints
 	);
 	sceneObjects.push_back(mariposa);
 }

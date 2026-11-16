@@ -46,8 +46,9 @@ public:
 	static constexpr float BALLOON_X_MIN = WINDOW_WIDTH / 4;
 	static constexpr float BALLOON_X_MAX = WINDOW_WIDTH - 100;
 	//Generacion globos: 
-	static constexpr float VEL_MIN = 1.5f;
-	static constexpr float VEL_MAX = 4.0f;
+
+	static constexpr float VEL_MIN = 0.8f;
+	static constexpr float VEL_MAX = 1.2f;
 
 	//Posicion Mariposas
 	static constexpr float BUTTERFLY_X_MIN = WINDOW_WIDTH / 4;
@@ -97,7 +98,7 @@ private:
 	int goal = 0;		//puntos para superar nivel
 	int balPoints = 20; //puntos por globo
 	int numButterflies = 0; //Numero mariposasa
-	int balspeed = 0; // nose
+	float balspeed; // nose
 
 	int r = 0;//color fondo
 	int g = 0;
@@ -109,6 +110,7 @@ private:
 
 	int ultimaCantidadFlechas = -1;
 
+	int butterflyPoints = 5;
 	//Metodo auxiliar para generar globos y mariposas
 	void generateBalloon();
 	void generateButterfly();

@@ -6,8 +6,8 @@ class Butterfly : public MobileObject
 {
 private:
 
-	static constexpr float altura = 80.0f;
-	static constexpr float anchura = 80.0f;
+	static constexpr float altura = 60.0f;
+	static constexpr float anchura = 60.0f;
 	static constexpr float velEscalar = 120.0f;
 	static constexpr float velCaida = 250.0f;
 
@@ -17,11 +17,11 @@ private:
 	int filaActual = 1;
 	int columnaActual = 0;
 
-	static constexpr float TIEMPO_CAMBIO_DIR = 5.5f;
+	static constexpr float TIEMPO_CAMBIO_DIR = 2.5f;//en segundos
 	float dirTimer = 0.0f;
 
 	bool muerta = false;
-	int penalizacion = 50;
+	int penalizacion = 5;
 
 	void cambiarDireccion(const Vector2D<float>& nuevaDir);
 

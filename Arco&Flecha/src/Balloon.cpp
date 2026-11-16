@@ -6,7 +6,7 @@ Balloon::Balloon(Point2D<float> pos, Vector2D<float>dir, Texture* texture, int c
 	texture(texture),*/
 	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
 								//
-	MobileObject(game, pos, dir * VelEscalar, texture, anchura, altura),
+	MobileObject(game, pos, dir, texture, anchura, altura),
 	color(color),
 	//dimension(pos, anchura, altura),
 	puntos(puntos)

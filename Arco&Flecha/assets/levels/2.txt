@@ -1,5 +1,8 @@
 # Level 2
 bgcolor 135 206 235
-arrows 12
+arrows 10
 baldelay 500
-balpoints 20
+balpoints 10
+balspeed 0.25
+goal 250
+butterflies 8
