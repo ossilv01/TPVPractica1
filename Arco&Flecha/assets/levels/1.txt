@@ -5,4 +5,4 @@ baldelay 1000
 balpoints 10
 balspeed 0.2
 goal 100
-butterflies 5
+butterflies 4

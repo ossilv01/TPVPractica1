@@ -27,6 +27,7 @@
 #include "SceneObject.h"
 #include "MobileObject.h"
 #include "GameObject.h"
+#include "GameError.h"
 
 //semilla
 #include <random> 
@@ -70,7 +71,9 @@ Game::loadLevel(int level) {
 	goal = 0; 
 	numButterflies = 0; //por ahora
 	string lector;
+	int lineNumber = 0;
 	while (file >> lector) {
+		lineNumber++;
 		string error = "";
 
 		if (lector[0] == '#') {
@@ -110,7 +113,8 @@ Game::loadLevel(int level) {
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 		if (!error.empty() && file.fail()) {
-			throw string("Error: formato invalido para '" + error + "' en archivo " + path);
+			//throw string("Error: formato invalido para '" + error + "' en archivo " + path);
+			throw FileFormatError(path, lineNumber, "Formato invalido para: '" + lector + "'");
 		}
 	}
 	file.close();
@@ -125,17 +129,20 @@ Game::Game()
 {
 	//Carga archivo
 	if (!loadLevel(currentLevel)) {
-		throw string("Error: No se puede abrir el archivo de configuracion del nivel 1.txt");
+		//throw string("Error: No se puede abrir el archivo de configuracion del nivel 1.txt");
+		throw FileNotFoundError(string(LEVEL_ROOT) + "1.txt");
 	}
 
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
-		throw "SDL_Init: "s + SDL_GetError();
+		//throw "SDL_Init: "s + SDL_GetError();
+		throw SDLError("Error al Incializar SDL");
 
 	if (!SDL_CreateWindowAndRenderer(WINDOW_TITLE,
 	                                 WINDOW_WIDTH, WINDOW_HEIGHT,
 	                                 0, &window, &renderer))
-		throw "window or renderer: "s + SDL_GetError();
+		//throw "window or renderer: "s + SDL_GetError();
+		throw SDLError("Error al crear ventana/render");
 	// Carga las texturas al inicio
 	try {
 		textures.fill(nullptr);
@@ -147,12 +154,13 @@ Game::Game()
 
 			textures[i] = new Texture(renderer, (imgRoot + name).c_str(), nrows, ncols);
 			if (textures[i] == nullptr) {
-				throw string("Error: Fichero de imagen no encontrado o valido para:" + fullPath);
+				//throw string("Error: Fichero de imagen no encontrado o valido para:" + fullPath);
+				throw FileNotFoundError(fullPath);
 			}
 		}
 	}
 
-	catch (const string& e) {
+	catch (const exception& e) {
 		// TODO: liberar la memoria reservada
 		clean();
 		throw; // relanza la excepción
