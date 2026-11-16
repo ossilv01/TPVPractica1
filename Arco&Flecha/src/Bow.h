@@ -29,7 +29,7 @@ private:
 	//numero flechas
 	int numArrows = 5; 
 	//Velocidad escalar
-	float velocidadEscalar = 300.0f;
+	static constexpr float velocidadEscalar = 300.0f;
 
 
 public:

@@ -21,6 +21,12 @@
 #include "Arrow.h"
 #include "Balloon.h"
 #include "texture.h"
+
+//nuevos
+#include "SceneObject.h"
+#include "MobileObject.h"
+#include "GameObject.h"
+
 //semilla
 #include <random> 
 // time() 
@@ -142,7 +148,7 @@ Game::Game()
 	// TODO: crear los objetos del juego
 	//Creamos objeto arco
 	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y),initialArrows, getTexture(BOW), this);
-
+	sceneObjects.push_back(bow); //añadido a la lista bow
 	//semilla generadora aleatoria
 	random_device rd; 
 	randomGenerator.seed(rd());
@@ -151,14 +157,19 @@ Game::Game()
 void Game::clean() {
 	
 	//Liberamos objeto bow y vectores objetos
-	if (bow != nullptr) {
-		delete bow;
-		bow = nullptr;
-	}
-	for (Arrow* a : arrows) delete a;
-	arrows.clear();
-	for (Balloon* b : balloons) delete b;
-	balloons.clear();
+	//if (bow != nullptr) {
+	//	delete bow;
+	//	bow = nullptr;
+	////}
+	//for (Arrow* a : arrows) delete a;
+	//arrows.clear();
+	//for (Balloon* b : balloons) delete b;
+	//balloons.clear();
+
+	//Adaptado a la lista polimorfica
+	for (SceneObject* obj : sceneObjects) delete obj;
+	sceneObjects.clear();
+	bow = nullptr;
 
 	//Libera array texturas
 	for (Texture* texture : textures) {
@@ -186,9 +197,12 @@ Game::render() const
 	SDL_RenderClear(renderer);
 
 	// TODO
-	if (bow != nullptr) bow->render();
-	for (Arrow* a : arrows) a->render();
-	for (Balloon* b : balloons) b->render();
+	//if (bow != nullptr) bow->render();
+	//for (Arrow* a : arrows) a->render();
+	//for (Balloon* b : balloons) b->render();
+	//Unica render
+	for (SceneObject* obj : sceneObjects) obj->render();
+
 	//Puntuacion
 	imprimirScore();
 
@@ -199,10 +213,10 @@ void
 Game::update(float delta)
 {
 	// TODO
-	//Arco
-	if (bow != nullptr) {
-		bow->update(delta);
-	}
+	////Arco
+	//if (bow != nullptr) {
+	//	bow->update(delta);
+	//}
 
 	// Restamos los milisegundos fijos que dura cada frame gracias al SDL_Delay
 	spawnTimer -= FRAME_PERIOD;
@@ -213,27 +227,37 @@ Game::update(float delta)
 
 	//Flechas
 	//bucle para borrar de forma segura
-	for (auto it = arrows.begin(); it != arrows.end(); ) {
+	//for (auto it = arrows.begin(); it != arrows.end(); ) {
+	//	if (!(*it)->update(delta)) {
+	//		delete* it;            // Liberamos memoria de la flecha
+	//		it = arrows.erase(it); // La quitamos del vector y avanzamos el iterador
+	//	}
+	//	else {
+	//		++it;
+	//	}
+	//}
+
+	for (auto it = sceneObjects.begin(); it != sceneObjects.end();) {
 		if (!(*it)->update(delta)) {
-			delete* it;            // Liberamos memoria de la flecha
-			it = arrows.erase(it); // La quitamos del vector y avanzamos el iterador
+			delete* it;
+			it = sceneObjects.erase(it);
 		}
 		else {
 			++it;
 		}
 	}
 
-	// Globos
-	for (auto it = balloons.begin(); it != balloons.end(); ) {
-		//Muerto En general
-		if (!(*it)->update(delta)) {
-			delete* it;
-			it = balloons.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
+	//// Globos
+	//for (auto it = balloons.begin(); it != balloons.end(); ) {
+	//	//Muerto En general
+	//	if (!(*it)->update(delta)) {
+	//		delete* it;
+	//		it = balloons.erase(it);
+	//	}
+	//	else {
+	//		++it;
+	//	}
+	//}
 	//Impresion en consola:
 	imprimirResult();
 }
@@ -305,7 +329,7 @@ Game::generateBalloon() {
 		balPoints,
 		this);
 
-	balloons.push_back(globo);
+	sceneObjects.push_back(globo);
 }
 
 void
@@ -320,7 +344,7 @@ Game::imprimirResult() {
 		}
 
 		// Si ya no quedan flechas en el arco Y todas las flechas disparadas han salido de la pantalla
-		if (flechasDisponibles == 0 && arrows.empty()) {
+		if (flechasDisponibles == 0 && numFlechasActivas ==0) {
 			cout << "\n" << endl;
 			cout << "FIN DEL JUEGO. Sin municion." << endl;
 			cout << "Puntuacion final: " << score << " puntos." << endl;
@@ -378,12 +402,23 @@ Game::imprimirScore() const{
  Game::checkCollision(const Rectangle& rect)
  {
 	// TODO
-	 for (auto globo : balloons) {
-		 if (globo != nullptr) {
-			 if (globo->hit(rect)) {
-				 return true; //Ha habido colision
-			 }
+	 //for (auto globo : balloons) {
+		// if (globo != nullptr) {
+		//	 if (globo->hit(rect)) {
+		//		 return true; //Ha habido colision
+		//	 }
+		// }
+	 //}
+	 for (SceneObject* obj : sceneObjects) {
+		 if (obj != nullptr && obj->hit(rect))
+		 {
+			 return true; // ha habido colision
 		 }
-	 }
+		}
 	return false;
+ }
+
+ void Game::addArrow(Arrow* arrow) {
+	 sceneObjects.push_back(arrow);
+	 numFlechasActivas++;
  }

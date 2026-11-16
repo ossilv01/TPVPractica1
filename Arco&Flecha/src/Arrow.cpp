@@ -29,6 +29,10 @@ bool Arrow::update(float delta) {
 	//Metodos de rectangle
 	float puntaX = dimension.getTopLeftCorner().getX() + dimension.getHeight();
 	if (puntaX>= game->WINDOW_WIDTH) {
+		//Contador de flechas activas para game
+		if (game != nullptr) {
+			game->removeArrow(); //Sera 0 cuando la flecha supere el borde derecho
+		 }
 		return false;
 	}
 															//grosor collider punta flecha

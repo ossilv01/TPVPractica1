@@ -7,6 +7,7 @@
 #include <vector>
 #include <random>
 
+#include <list> //lista polimorfica
 #include "rectangle.h"
 //using namespace std;
 // Declaraciones anticipadas
@@ -14,6 +15,7 @@ class Texture;
 class Bow;
 class Arrow;
 class Balloon;
+class SceneObject;
 /**
  * Clase principal del juego.
  */
@@ -70,10 +72,12 @@ private:
 
 	// Elemento del juego
 	// TODO: añadir atributos para los objetos del juego
+	std::list<SceneObject*> sceneObjects; //Lista polimorifca unica
 	Bow* bow = nullptr; // puntero a arco
-	std::vector<Arrow*> arrows; //Vector dinamico flechas
-	//Globos
-	std::vector<Balloon*> balloons; //Vector dinamico de globos
+	int activeArrows = 0;
+	//std::vector<Arrow*> arrows; //Vector dinamico flechas
+	////Globos
+	//std::vector<Balloon*> balloons; //Vector dinamico de globos
 	std::mt19937 randomGenerator;	//motor aletaorio
 	//float spawnTimer = 0.0f;	//Cronometro tiempo para globos
 	//static constexpr float SPAWN_COOLDOWN = 0.5f; //Frecuencia de generacion
@@ -88,6 +92,10 @@ private:
 	int r = 0;//color fondo
 	int g = 0;
 	int b = 0; 
+
+	//Debido a que ya no existe un vector de arrows sino una lista de gameobjects
+	//Utilizo un contador para saber cuantas flechas activas en el juego hay
+	int numFlechasActivas = 0;
 
 	int ultimaCantidadFlechas = -1;
 
@@ -122,10 +130,13 @@ public:
 	 bool checkCollision(const Rectangle& rect);
 	 
 	 //Metodo para instnaciar creacion flecha
-	 void addArrow(Arrow* arrow) {
-		 arrows.push_back(arrow);
+	 void addArrow(Arrow* arrow);
+
+	 void removeArrow() {
+		 if (numFlechasActivas > 0) numFlechasActivas--;
 	 }
 
+	 //Metodo para Balloon, se encarga de sumar puntos
 	 void addScore(int points) {
 		 score += points;
 	 }
