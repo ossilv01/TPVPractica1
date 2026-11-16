@@ -72,15 +72,15 @@ bool Butterfly::update(float delta) {
 
 	if (rebote) {
 		cambiarDireccion(nuevaVel);
-		dirTimer = 0.0f; // Reiniciamos temporizador aleatorio al rebotar
+		dirTimer = 0.0f; //Reiniciamos temporizador aleatorio al rebotar
 	}
 	else {
-		// 3. Cambio aleatorio de dirección cada cierto tiempo
+		//Cambio aleatorio de dirección cada cierto tiempo
 		dirTimer += delta;
 		if (dirTimer >= TIEMPO_CAMBIO_DIR) {
 			dirTimer = 0.0f;
-			// Generamos nueva dirección aleatoria normalizada
-			float angle = (static_cast<float>(rand()) / RAND_MAX) * 2.0f * 3.14159f;
+			//Nueva dirección aleatoria (semilla de game) normalizada
+			float angle = game->getRandomAngle();
 			Vector2D<float> randDir(std::cos(angle), std::sin(angle));
 			cambiarDireccion(randDir * velEscalar);
 		}

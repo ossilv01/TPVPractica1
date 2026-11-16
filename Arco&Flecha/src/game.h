@@ -155,6 +155,11 @@ public:
 		 if (numFlechasActivas > 0) numFlechasActivas--;
 	 }
 
+	 //Devuelve angulo aleatorio (para butterfly)
+	 float getRandomAngle() {
+		 float angle = uniform_real_distribution<float>(0.0f, 2.0f * 3.14159f)(randomGenerator);
+	 }
+
 	 //Metodo para Balloon y Butterfly, se encarga de sumar o restar puntos
 	 void addScore(int points) {
 		 score += points;
