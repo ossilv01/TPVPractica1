@@ -61,7 +61,7 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 bool
 Game::loadLevel(int level) {
 	string path = LEVEL_ROOT + to_string(level) + ".txt";
-	std::ifstream file(path);
+	ifstream file(path);
 
 	//Si archivo no existe devolvemos false. Casos a proecesar mas abajo:
 	if (!file.is_open()) {
@@ -113,7 +113,6 @@ Game::loadLevel(int level) {
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 		if (!error.empty() && file.fail()) {
-			//throw string("Error: formato invalido para '" + error + "' en archivo " + path);
 			throw FileFormatError(path, lineNumber, "Formato invalido para: '" + lector + "'");
 		}
 	}
@@ -129,19 +128,16 @@ Game::Game()
 {
 	//Carga archivo
 	if (!loadLevel(currentLevel)) {
-		//throw string("Error: No se puede abrir el archivo de configuracion del nivel 1.txt");
 		throw FileNotFoundError(string(LEVEL_ROOT) + "1.txt");
 	}
 
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
-		//throw "SDL_Init: "s + SDL_GetError();
 		throw SDLError("Error al Incializar SDL");
 
 	if (!SDL_CreateWindowAndRenderer(WINDOW_TITLE,
 	                                 WINDOW_WIDTH, WINDOW_HEIGHT,
 	                                 0, &window, &renderer))
-		//throw "window or renderer: "s + SDL_GetError();
 		throw SDLError("Error al crear ventana/render");
 	// Carga las texturas al inicio
 	try {
@@ -154,7 +150,6 @@ Game::Game()
 
 			textures[i] = new Texture(renderer, (imgRoot + name).c_str(), nrows, ncols);
 			if (textures[i] == nullptr) {
-				//throw string("Error: Fichero de imagen no encontrado o valido para:" + fullPath);
 				throw FileNotFoundError(fullPath);
 			}
 		}
@@ -169,11 +164,7 @@ Game::Game()
 	// Configura que se pueden utilizar capas translúcidas
 	// SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-	
 	// TODO: crear los objetos del juego
-	////Creamos objeto arco
-	//bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y),initialArrows, getTexture(BOW), this);
-	//sceneObjects.push_back(bow); //añadido a la lista bow
 	//semilla generadora aleatoria
 	random_device rd; 
 	randomGenerator.seed(rd());
@@ -183,20 +174,8 @@ Game::Game()
 
 void Game::clean() {
 	
-	//Liberamos objeto bow y vectores objetos
-	//if (bow != nullptr) {
-	//	delete bow;
-	//	bow = nullptr;
-	////}
-	//for (Arrow* a : arrows) delete a;
-	//arrows.clear();
-	//for (Balloon* b : balloons) delete b;
-	//balloons.clear();
-
 	//Adaptado a la lista polimorfica
-	for (SceneObject* obj : sceneObjects) delete obj;
-	sceneObjects.clear();
-	bow = nullptr;
+	clearScene();
 
 	//Libera array texturas
 	for (Texture* texture : textures) {
@@ -224,9 +203,6 @@ Game::render() const
 	SDL_RenderClear(renderer);
 
 	// TODO
-	//if (bow != nullptr) bow->render();
-	//for (Arrow* a : arrows) a->render();
-	//for (Balloon* b : balloons) b->render();
 	//Unica render
 	for (SceneObject* obj : sceneObjects) obj->render();
 
@@ -299,7 +275,6 @@ Game::run()
 			//por lo tanto usamos delay de 28 milisegundos para no ir tan rapido
 			SDL_Delay(FRAME_PERIOD - frameTime);
 		}
-
 	}
 }
 
@@ -308,7 +283,7 @@ void
 Game::saveGame(const std::string& filename) const {
 	std::ofstream out(filename);
 	if (!out.is_open()) {
-		throw GameError("No se pudo crear el archivo de guardado: " + filename);
+		throw FileNotFoundError("No se pudo crear el archivo de guardado: " + filename);
 	}
 	//Datos globales
 	out << currentLevel << " " << score << " "<< spawnTimer << endl;
@@ -321,7 +296,7 @@ Game::saveGame(const std::string& filename) const {
 }
 
 void 
-Game::loadGame(const std::string& filename) {
+Game::loadGame(const string& filename) {
 	std::ifstream in(filename);
 	if (!in.is_open()) {
 		throw FileNotFoundError(filename);
@@ -330,57 +305,31 @@ Game::loadGame(const std::string& filename) {
 	int savedLevel, savedScore;
 	float savedTimer;
 	in >> savedLevel >> savedScore >> savedTimer;
-	if (in.fail()) {
-		throw FileFormatError(filename, 1, "Cabecera de partida guardada invalida");
-	}
-	//Cargamos parametros del nivel correspondiente
-	if (!loadLevel(savedLevel)) {
-		throw FileFormatError(filename, 1, "El nivel guardado (" + std::to_string(savedLevel) + ") no existe");
-	}
-	//Limpieza e incializacion
-	for (SceneObject* obj : sceneObjects) {
-		delete obj;
-	}
-	sceneObjects.clear();
-	bow = nullptr;
-	numFlechasActivas = 0;
 
+	if (in.fail()) throw FileFormatError(filename, 1, "Cabecera de partida guardada invalida");
+	if (!loadLevel(savedLevel)) throw FileFormatError(filename, 1, "El nivel guardado (" + to_string(savedLevel) + ") no existe");
+	
+	//Limpieza e incializacion
+	clearScene();
 	currentLevel = savedLevel;
 	score = savedScore;
 	spawnTimer = savedTimer;
+
 	//Leer cada objeto
 	char tipo;
 	int lineNumber = 1;
 	while (in >> tipo) {
 		lineNumber++;
-		if (tipo == 'W') {
-			bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(0, 0), 0, getTexture(BOW), this);
-			bow->load(in);
-			sceneObjects.push_back(bow);
-			ultimaCantidadFlechas = bow->getFlechas();
-		}
-		else if (tipo == 'A') {
-			Arrow* arrow = new Arrow(Vector2D<float>(0, 0), Point2D<float>(0, 0), getTexture(ARROW), this);
-			arrow->load(in);
-			sceneObjects.push_back(arrow);
-			numFlechasActivas++;
-		}
-		else if (tipo == 'B') {
-			Balloon* balloon = new Balloon(Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BALLOONS), 0, balPoints, this);
-			balloon->load(in);
-			sceneObjects.push_back(balloon);
-		}
-		else if (tipo == 'M') {
-			Butterfly* butterfly = new Butterfly(this, Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BUTTERFLY), butterflyPoints);
-			butterfly->load(in);
-			sceneObjects.push_back(butterfly);
-		}
-		else {
-			throw FileFormatError(filename, lineNumber, std::string("Tipo de objeto desconocido: ") + tipo);
+
+		SceneObject* obj = loadObject(tipo, in);
+		if(obj==nullptr){
+			throw FileFormatError(filename, lineNumber, string("Tipo de objeto desconocido: ") + tipo);
 		}
 		if (in.fail()) {
+			delete obj;
 			throw FileFormatError(filename, lineNumber, "Datos corruptos o incompletos al cargar objeto");
 		}
+		sceneObjects.push_back(obj);
 	}
 	in.close();
 }
@@ -446,7 +395,7 @@ Game::generateButterfly() {
 	int posY = uniform_int_distribution<int>(BUTTERFLY_Y_MIN, BUTTERFLY_Y_MAX)(randomGenerator);
 
 	//angulo aleatorio y puesto en direccion
-	float angle = uniform_real_distribution<float>(0.0f, 2.0f * 3.14159f)(randomGenerator);
+	float angle = uniform_real_distribution<float>(ANGLE_MIN, ANGLE_MAX * 3.14159f)(randomGenerator);
 	Vector2D<float> dir(std::cos(angle), std::sin(angle));
 
 	Butterfly* mariposa = new Butterfly(this, Point2D<float>(posX, posY),
@@ -487,21 +436,6 @@ void Game::nextLevel() {
 		cout << "\n" << "Nivel: " << currentLevel << endl;
 		score = 0;
 		init();
-		//Borrar globos,flecha y arco
-		//for (SceneObject* obj : sceneObjects) {
-		//	delete obj;
-		//}
-		//sceneObjects.clear();
-		//bow = nullptr;
-		//numFlechasActivas = 0;
-
-		//// Reincio marcadores del nivel y flehcas
-		//score = 0;
-		//ultimaCantidadFlechas = initialArrows;
-		//
-		////Nuevo arco
-		//bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y), initialArrows, getTexture(BOW), this);
-		//sceneObjects.push_back(bow);
 	}
 }
 
@@ -544,14 +478,8 @@ Game::imprimirScore() const{
 //Arrancar cualquier nivel
 void 
 Game::init() {
-	//Limpiamos 
-	for (SceneObject* obj : sceneObjects) {
-		delete obj;
-	}
-	sceneObjects.clear();
-	bow = nullptr;
-	numFlechasActivas = 0;
-
+	//Limpiamos escena 
+	clearScene();
 	// Reincio marcadores del nivel y flehcas
 	score = 0;
 	ultimaCantidadFlechas = initialArrows;
@@ -569,18 +497,10 @@ Game::init() {
  Game::checkCollision(const Rectangle& rect)
  {
 	// TODO
-	 //for (auto globo : balloons) {
-		// if (globo != nullptr) {
-		//	 if (globo->hit(rect)) {
-		//		 return true; //Ha habido colision
-		//	 }
-		// }
-	 //}
 	 for (SceneObject* obj : sceneObjects) {
 		 if (obj != nullptr && obj->hit(rect))
-		 {
-			 return true; // ha habido colision
-		 }
+		 return true; // ha habido colision
+		 
 		}
 	return false;
  }
@@ -588,4 +508,41 @@ Game::init() {
  void Game::addArrow(Arrow* arrow) {
 	 sceneObjects.push_back(arrow);
 	 numFlechasActivas++;
+ }
+
+ float Game::getRandomAngle() {
+	return uniform_real_distribution<float>(ANGLE_MIN, ANGLE_MAX * 3.14159f)(randomGenerator);
+ }
+
+ void Game::clearScene() {
+	 //Limpieza e incializacion
+	 for (SceneObject* obj : sceneObjects) {
+		 delete obj;
+	 }
+	 sceneObjects.clear();
+	 bow = nullptr;
+	 numFlechasActivas = 0;
+ }
+
+ SceneObject* Game::loadObject(char tipo, istream& in) {
+	 SceneObject* obj = nullptr;
+	 if (tipo == 'W') {
+		 bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(0, 0), 0, getTexture(BOW), this);
+		 obj = bow;
+	 }
+	 else if (tipo == 'A') {
+		 obj = new Arrow(Vector2D<float>(0, 0), Point2D<float>(0, 0), getTexture(ARROW), this);
+		 numFlechasActivas++;
+	 }
+	 else if (tipo == 'B') {
+		 obj = new Balloon(Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BALLOONS), 0, balPoints, this);
+	 }
+	 else if (tipo == 'M') {
+		 obj = new Butterfly(this, Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BUTTERFLY), butterflyPoints);
+	 }
+	 if (obj != nullptr) {
+		 obj->load(in);
+		 if (tipo == 'W') ultimaCantidadFlechas = bow->getFlechas();
+	 }
+	 return obj;
  }

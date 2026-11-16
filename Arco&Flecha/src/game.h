@@ -50,13 +50,15 @@ public:
 	static constexpr float VEL_MIN = 0.8f;
 	static constexpr float VEL_MAX = 1.2f;
 
-	//Posicion Mariposas
+	//Posiciones y valores para Mariposas
 	static constexpr float BUTTERFLY_X_MIN = WINDOW_WIDTH / 4;
 	static constexpr float BUTTERFLY_X_MAX = WINDOW_WIDTH - 100;
 
 	static constexpr float BUTTERFLY_Y_MIN = WINDOW_HEIGHT/6;
 	static constexpr float BUTTERFLY_Y_MAX = WINDOW_HEIGHT - 150;
 
+	static constexpr float ANGLE_MIN = 0.0f;
+	static constexpr float ANGLE_MAX = 2.0f;
 
 	enum TextureName
 	{
@@ -83,7 +85,6 @@ private:
 	// TODO: añadir atributos para los objetos del juego
 	std::list<SceneObject*> sceneObjects; //Lista polimorifca unica
 	Bow* bow = nullptr; // puntero a arco
-	int activeArrows = 0;
 	//std::vector<Arrow*> arrows; //Vector dinamico flechas
 	////Globos
 	//std::vector<Balloon*> balloons; //Vector dinamico de globos
@@ -126,12 +127,15 @@ private:
 	void nextLevel(); //Preparar el siguiente nivel
 
 	//Limpieza texturas y sdl
-	void clean();
+	void clean(); //memoryleaks
 	void init();
+	void clearScene(); 
 
 	//Guardado y carga de momento de partida
 	void saveGame(const std::string& filename) const;
 	void loadGame(const std::string& filename);
+	//Carga individual de cada objeto
+	SceneObject* loadObject(char tipo, std::istream& in);
 
 	//Puntuacion que se actualiza
 	int score = 0;
@@ -156,9 +160,7 @@ public:
 	 }
 
 	 //Devuelve angulo aleatorio (para butterfly)
-	 float getRandomAngle() {
-		 float angle = uniform_real_distribution<float>(0.0f, 2.0f * 3.14159f)(randomGenerator);
-	 }
+	 float getRandomAngle();
 
 	 //Metodo para Balloon y Butterfly, se encarga de sumar o restar puntos
 	 void addScore(int points) {

@@ -4,9 +4,9 @@
 
 Bow::Bow(Vector2D<float> direccion, Point2D<float> posicion, int arrows, Texture* textura, Game* game) :
 	SceneObject(game, posicion, textura, anchura, altura),
+	armed(false),
 	dir(direccion),
-	numArrows(arrows),
-	armed(false)
+	numArrows(arrows)
 {
 }
 //804.0f / 2.0f, 381.0f

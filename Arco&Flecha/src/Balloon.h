@@ -8,13 +8,6 @@ class Balloon : public MobileObject
 {
 private:
 
-	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
-
-	//Game* game = nullptr; //puntero a game para sumar puntuacion
-	//Vector2D<float> vel; //velocidad
-	//Texture* texture = nullptr; //Puntero a textura
-	//Rectangle dimension;	
-
 	//atributos propios
 	int color;			//Indice fila textura
 	int puntos;
@@ -40,8 +33,8 @@ public:
 	//bool getterExplotado() const;
 	
 	//Cargar de saved.txt
-	void save(std::ostream& out) const;
-	void load(std::istream& in);
+	void save(std::ostream& out) const override;
+	void load(std::istream& in) override;
 
 };
 

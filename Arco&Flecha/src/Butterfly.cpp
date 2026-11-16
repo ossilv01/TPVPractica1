@@ -36,8 +36,6 @@ void Butterfly::render() const{
 bool Butterfly::update(float delta) {
 	MobileObject::update(delta);
 	Point2D<float> pos = dimension.getTopLeftCorner();
-	float w = dimension.getWidth();
-	float h = dimension.getHeight();
 
 	//Mariposa muerta, cayendo
 	if (muerta) {
@@ -48,33 +46,8 @@ bool Butterfly::update(float delta) {
 		return true; // Cae con columnaActual = 0
 	}
 
-	//Mariposa viva
-	Vector2D<float> nuevaVel = speed;
-	bool rebote = false;
-	//Rebote en los 4 bordes de la ventana
-	if (pos.getX() < 0) {
-		nuevaVel = Vector2D<float>(std::abs(speed.getX()), speed.getY());
-		rebote = true;
-	}
-	else if (pos.getX() + w > game->WINDOW_WIDTH) {
-		nuevaVel = Vector2D<float>(-std::abs(speed.getX()), speed.getY());
-		rebote = true;
-	}
-
-	if (pos.getY() < 0) {
-		nuevaVel = Vector2D<float>(nuevaVel.getX(), std::abs(speed.getY()));
-		rebote = true;
-	}
-	else if (pos.getY() + h > game->WINDOW_HEIGHT) {
-		nuevaVel = Vector2D<float>(nuevaVel.getX(), -std::abs(speed.getY()));
-		rebote = true;
-	}
-
-	if (rebote) {
-		cambiarDireccion(nuevaVel);
-		dirTimer = 0.0f; //Reiniciamos temporizador aleatorio al rebotar
-	}
-	else {
+	//Mariposa viva, rebote en bordes o cambio aleatorio de direccoin
+	if(!checkBounds()) {
 		//Cambio aleatorio de dirección cada cierto tiempo
 		dirTimer += delta;
 		if (dirTimer >= TIEMPO_CAMBIO_DIR) {
@@ -87,23 +60,8 @@ bool Butterfly::update(float delta) {
 	}
 
 	// Animacion
-	animTimer += delta;
-	if (animTimer >= TIEMPO_FRAME) {
-		animTimer = 0.0f;
-		columnaActual++;
-
-		if (columnaActual >= NUM_COLUMNAS) {
-			columnaActual = 0;
-
-			// Si estaba haciendo animación de giro (filas 2 o 3), pasa al aleteo normal (filas 0 o 1)
-			if (filaActual == 2) filaActual = 0;      // Terminó giro a izquierda -> vuela izq
-			else if (filaActual == 3) filaActual = 1; // Terminó giro a derecha -> vuela dcha
-		}
-	}
-
+	updateAnimacion(delta);
 	return true;
-
-
 }
 
 bool Butterfly::hit(const Rectangle& rect) {
@@ -120,6 +78,46 @@ bool Butterfly::hit(const Rectangle& rect) {
 		return false; // Devuelve false para NO sumar combo a la flecha
 	}
 	return false;
+}
+
+bool Butterfly::checkBounds() {
+	Point2D<float> pos = dimension.getTopLeftCorner();
+	float vx = speed.getX();
+	float vy = speed.getY();
+	bool rebote = false; 
+
+	//Rebote horizontal izquierda y derecha
+	if ((pos.getX() < 0 && vx < 0) || (pos.getX() + dimension.getWidth() > game->WINDOW_WIDTH && vx > 0)) {
+		vx = -vx;
+		rebote = true;
+	}
+	//Rebote vertical, arriba y abajo
+	if ((pos.getY() < 0 && vy < 0) || (pos.getY() + dimension.getHeight() > game->WINDOW_HEIGHT && vy > 0)) {
+		vy = -vy;
+		rebote = true;
+	}
+	//Aplicar cambio y animacion
+	if (rebote) {
+		cambiarDireccion(Vector2D<float>(vx, vy));
+		dirTimer = 0.0f;
+	}
+	return rebote;
+}
+
+void Butterfly::updateAnimacion(float delta) {
+	animTimer += delta;
+	if (animTimer >= TIEMPO_FRAME) {
+		animTimer = 0.0f;
+		columnaActual++;
+
+		if (columnaActual >= NUM_COLUMNAS) {
+			columnaActual = 0;
+
+			// Si estaba haciendo animación de giro (filas 2 o 3), pasa al aleteo normal (filas 0 o 1)
+			if (filaActual == 2) filaActual = 0;      // Terminó giro a izquierda -> vuela izq
+			else if (filaActual == 3) filaActual = 1; // Terminó giro a derecha -> vuela dcha
+		}
+	}
 }
 
 void Butterfly::save(std::ostream& out) const {

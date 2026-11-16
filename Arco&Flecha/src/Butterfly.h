@@ -34,8 +34,11 @@ public:
 	bool update(float delta) override;
 	bool hit(const Rectangle&) override;
 
+	//Metodos propios logica
+	bool checkBounds();
+	void updateAnimacion(float delta);
 	//Cargar de saved.txt
-	void save(std::ostream& out) const;
-	void load(std::istream& in);
+	void save(std::ostream& out) const override;
+	void load(std::istream& in) override;
 };
 

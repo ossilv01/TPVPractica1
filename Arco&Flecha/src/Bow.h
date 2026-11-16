@@ -12,15 +12,6 @@ private:
 	static constexpr float altura = 100.0f;
 	static constexpr float anchura = 100.0f;
 	
-	//heredamos: game, texture, position y dimension (rectangle)
-
-	////puntero a textura
-	//Texture* tex = nullptr; 
-	////puntero a game
-	//Game* game = nullptr;
-	////Dimensiones 
-	//Rectangle tam;
-
 	// Atributos exclusivos
 	//Armado o no
 	bool armed;
@@ -50,8 +41,8 @@ public:
 	void Shoot();
 
 	//Cargar de saved.txt
-	void save(std::ostream& out) const;
-	void load(std::istream& in);
+	void save(std::ostream& out) const override;
+	void load(std::istream& in) override;
 
 	//getter de Point2D
 	Point2D <float> getPosition() const;

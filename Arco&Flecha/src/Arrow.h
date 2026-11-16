@@ -10,22 +10,6 @@ class Arrow : public MobileObject
 {
 
 private:
-	//dimensiones
-	//404.0f/9, 82.0f/9
-
-	//		: SceneObject(game, pos, tex, width, height), velocidad(vel)
-
-	//Puntero textura
-	//Texture* tex = nullptr; 
-
-	////Puntero a game para colisiones/Aprovechamos para variables publicas GAME
-	//Game* game = nullptr;
-
-	////Dimensiones:
-	//Rectangle tam;
-
-	////Velocidad/Direccion movimiento: 
-	//Vector2D <float> dir;
 
 	//velocidad escalar:
 	static constexpr float Velocidad = 500.0f;
@@ -44,7 +28,7 @@ public:
 	bool update(float delta) override;
 
 	//Cargar de saved.txt
-	void save(std::ostream& out) const;
-	void load(std::istream& in);
+	void save(std::ostream& out) const override;
+	void load(std::istream& in) override;
 };
 
