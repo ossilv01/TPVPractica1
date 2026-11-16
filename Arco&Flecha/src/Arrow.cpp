@@ -39,9 +39,14 @@ bool Arrow::update(float delta) {
 	Point2D<float> posPunta(dimension.getTopLeftCorner().getX() + dimension.getWidth() - anchoPunta, dimension.getTopLeftCorner().getY());
 	Rectangle colliderPunta(posPunta, anchoPunta, anchoPunta);
 	//Colision globos:
-	//el tam esta puesto provisionalmente
 	//Detecta si ha habido impacto, pero la flecha sigue estando
-	game->checkCollision(colliderPunta);
+	if (game->checkCollision(colliderPunta)) {
+		if (globosExplotados > 0) {
+			//A partir del segundo globo seguido se aplica el bonus
+			game->addScore(globosExplotados * bonus);
+		}
+		globosExplotados++;
+	}
 		
 	
 	return true; 

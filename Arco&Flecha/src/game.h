@@ -133,7 +133,6 @@ public:
 	 
 	 //Metodo para instnaciar creacion flecha
 	 void addArrow(Arrow* arrow);
-
 	 void removeArrow() {
 		 if (numFlechasActivas > 0) numFlechasActivas--;
 	 }

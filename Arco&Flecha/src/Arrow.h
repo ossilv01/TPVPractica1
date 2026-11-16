@@ -29,7 +29,9 @@ private:
 
 	//velocidad escalar:
 	static constexpr float Velocidad = 500.0f;
-
+	static constexpr float bonus = 5;
+	int globosExplotados = 0; //contador de globos explotados por CADA flecha individualmente
+	
 public:
 	//Constructor
 	Arrow(Vector2D<float>, Point2D<float>, Texture*, Game* game);
