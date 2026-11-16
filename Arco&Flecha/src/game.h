@@ -49,6 +49,13 @@ public:
 	static constexpr float VEL_MIN = 1.5f;
 	static constexpr float VEL_MAX = 4.0f;
 
+	//Posicion Mariposas
+	static constexpr float BUTTERFLY_X_MIN = WINDOW_WIDTH / 4;
+	static constexpr float BUTTERFLY_X_MAX = WINDOW_WIDTH - 100;
+
+	static constexpr float BUTTERFLY_Y_MIN = WINDOW_HEIGHT/6;
+	static constexpr float BUTTERFLY_Y_MAX = WINDOW_HEIGHT - 150;
+
 
 	enum TextureName
 	{
@@ -56,6 +63,7 @@ public:
 		ARROW,
 		BALLOONS,
 		DIGITS,
+		BUTTERFLY,
 		NUM_TEXTURES,
 	};
 
@@ -88,6 +96,8 @@ private:
 	int spawnTimer = 0; //cronometro en milisegundos
 	int goal = 0;		//puntos para superar nivel
 	int balPoints = 20; //puntos por globo
+	int numButterflies = 0; //Numero mariposasa
+	int balspeed = 0; // nose
 
 	int r = 0;//color fondo
 	int g = 0;
@@ -99,8 +109,9 @@ private:
 
 	int ultimaCantidadFlechas = -1;
 
-	//Metodo auxiliar para generar globos
+	//Metodo auxiliar para generar globos y mariposas
 	void generateBalloon();
+	void generateButterfly();
 
 	//Metodo auxiliar para imprimir nºflechas en consola:
 	void imprimirResult();
@@ -114,6 +125,7 @@ private:
 
 	//Limpieza texturas y sdl
 	void clean();
+	void init();
 
 	//Puntuacion que se actualiza
 	int score = 0;
@@ -137,9 +149,10 @@ public:
 		 if (numFlechasActivas > 0) numFlechasActivas--;
 	 }
 
-	 //Metodo para Balloon, se encarga de sumar puntos
+	 //Metodo para Balloon y Butterfly, se encarga de sumar o restar puntos
 	 void addScore(int points) {
 		 score += points;
+		 if (score < 0) score = 0;
 	 }
 };
 

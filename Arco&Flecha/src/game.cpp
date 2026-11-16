@@ -21,6 +21,7 @@
 #include "Arrow.h"
 #include "Balloon.h"
 #include "texture.h"
+#include "Butterfly.h"
 
 //nuevos
 #include "SceneObject.h"
@@ -51,7 +52,8 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 	TextureSpec{"bow.png", 1, 2},
 	{"arrow.png"},
 	{"balloons.png", 7, 6},
-	{"digits.png", 1, 10}
+	{"digits.png", 1, 10},
+	{"butterfly.png", 4, 10}
 
 };
 
@@ -66,7 +68,7 @@ Game::loadLevel(int level) {
 	}
 	//Se inicializa goal en caso de que no lo tenga el nivel
 	goal = 0; 
-
+	numButterflies = 0; //por ahora
 	string lector;
 	while (file >> lector) {
 		string error = "";
@@ -93,6 +95,10 @@ Game::loadLevel(int level) {
 		}
 		else if (lector == "bgcolor") {
 			file >> r >> g >> b;
+			error = lector;
+		}
+		else if (lector == "butterflies") {
+			file >> numButterflies;
 			error = lector;
 		}
 		else {
@@ -153,12 +159,14 @@ Game::Game()
 
 	
 	// TODO: crear los objetos del juego
-	//Creamos objeto arco
-	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y),initialArrows, getTexture(BOW), this);
-	sceneObjects.push_back(bow); //añadido a la lista bow
+	////Creamos objeto arco
+	//bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y),initialArrows, getTexture(BOW), this);
+	//sceneObjects.push_back(bow); //añadido a la lista bow
 	//semilla generadora aleatoria
 	random_device rd; 
 	randomGenerator.seed(rd());
+	//Preparacion nivel
+	init();
 }
 
 void Game::clean() {
@@ -239,8 +247,8 @@ Game::update(float delta)
 	}
 
 	//Impresion en consola:
-
 	imprimirResult();
+
 	//Caso sin municion = Derrota
 	if (bow != nullptr && bow->getFlechas() == 0 && numFlechasActivas == 0) {
 		cout << "\nFIN DEL JUEGO. Sin municion." << endl;
@@ -324,6 +332,24 @@ Game::generateBalloon() {
 }
 
 void
+Game::generateButterfly() {
+	int posX = uniform_int_distribution<int>(BUTTERFLY_X_MIN, BUTTERFLY_X_MAX)(randomGenerator);
+	int posY = uniform_int_distribution<int>(BUTTERFLY_Y_MIN, BUTTERFLY_Y_MAX)(randomGenerator);
+
+	//angulo aleatorio y puesto en direccion
+	float angle = uniform_real_distribution<float>(0.0f, 2.0f * 3.14159f)(randomGenerator);
+	Vector2D<float> dir(std::cos(angle), std::sin(angle));
+
+	Butterfly* mariposa = new Butterfly(this, Point2D<float>(posX, posY),
+		dir,
+		getTexture(BUTTERFLY),
+		50
+	);
+	sceneObjects.push_back(mariposa);
+}
+
+
+void
 Game::imprimirResult() {
 	if (bow != nullptr) {
 		int flechasDisponibles = bow->getFlechas();
@@ -351,21 +377,22 @@ void Game::nextLevel() {
 	else {
 		cout << "\n" << "Nivel: " << currentLevel << endl;
 		score = 0;
+		init();
 		//Borrar globos,flecha y arco
-		for (SceneObject* obj : sceneObjects) {
-			delete obj;
-		}
-		sceneObjects.clear();
-		bow = nullptr;
-		numFlechasActivas = 0;
+		//for (SceneObject* obj : sceneObjects) {
+		//	delete obj;
+		//}
+		//sceneObjects.clear();
+		//bow = nullptr;
+		//numFlechasActivas = 0;
 
-		// Reincio marcadores del nivel y flehcas
-		score = 0;
-		ultimaCantidadFlechas = initialArrows;
-		
-		//Nuevo arco
-		bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y), initialArrows, getTexture(BOW), this);
-		sceneObjects.push_back(bow);
+		//// Reincio marcadores del nivel y flehcas
+		//score = 0;
+		//ultimaCantidadFlechas = initialArrows;
+		//
+		////Nuevo arco
+		//bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y), initialArrows, getTexture(BOW), this);
+		//sceneObjects.push_back(bow);
 	}
 }
 
@@ -405,6 +432,29 @@ Game::imprimirScore() const{
 	}
 }
 
+//Arrancar cualquier nivel
+void 
+Game::init() {
+	//Limpiamos 
+	for (SceneObject* obj : sceneObjects) {
+		delete obj;
+	}
+	sceneObjects.clear();
+	bow = nullptr;
+	numFlechasActivas = 0;
+
+	// Reincio marcadores del nivel y flehcas
+	score = 0;
+	ultimaCantidadFlechas = initialArrows;
+
+	//Nuevo arco
+	bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y), initialArrows, getTexture(BOW), this);
+	sceneObjects.push_back(bow);
+	//Mariposas de una vez
+	for (int i = 0; i < numButterflies; i++) {
+		generateButterfly();
+	}
+}
 
  bool
  Game::checkCollision(const Rectangle& rect)

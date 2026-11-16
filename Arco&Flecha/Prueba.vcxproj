@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Butterfly.cpp" />
     <ClCompile Include="src\Arrow.cpp" />
     <ClCompile Include="src\Balloon.cpp" />
     <ClCompile Include="src\Bow.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Butterfly.h" />
     <ClInclude Include="src\Arrow.h" />
     <ClInclude Include="src\Balloon.h" />
     <ClInclude Include="src\Bow.h" />
