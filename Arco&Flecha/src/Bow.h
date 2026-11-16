@@ -50,6 +50,7 @@ public:
 	void Shoot();
 	//getter de Point2D
 	Point2D <float> getPosition() const;
+	int setFlechas(int flechas) { return numArrows = flechas; };
 
 };
 

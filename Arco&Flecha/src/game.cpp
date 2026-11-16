@@ -55,17 +55,21 @@ constexpr array<TextureSpec, Game::NUM_TEXTURES> textureList{
 
 };
 
-void
-Game::loadLevel() {
-	std::ifstream file("../assets/levels/1.txt");
+bool
+Game::loadLevel(int level) {
+	string path = LEVEL_ROOT + to_string(level) + ".txt";
+	std::ifstream file(path);
 
+	//Si archivo no existe devolvemos false. Casos a proecesar mas abajo:
 	if (!file.is_open()) {
-		throw string("Error: No se puede abrir el archivo de configuracion del nivel");
+		return false;
 	}
+	//Se inicializa goal en caso de que no lo tenga el nivel
+	goal = 0; 
 
 	string lector;
 	while (file >> lector) {
-		string error = " ";
+		string error = "";
 
 		if (lector[0] == '#') {
 			//ignorar comentarios #
@@ -96,12 +100,13 @@ Game::loadLevel() {
 			file.ignore(numeric_limits<std::streamsize>::max(), '\n');
 		}
 		if (!error.empty() && file.fail()) {
-			throw string("Error: formato invalido para '" + error + "' en archivo de nivel.");
+			throw string("Error: formato invalido para '" + error + "' en archivo " + path);
 		}
 	}
 	file.close();
 	//cooldown cargado al temporizador
 	spawnTimer = baldelay;
+	return true;
 }
 
 
@@ -109,7 +114,9 @@ Game::Game()
   : exit(false), score(0)
 {
 	//Carga archivo
-	loadLevel();
+	if (!loadLevel(currentLevel)) {
+		throw string("Error: No se puede abrir el archivo de configuracion del nivel 1.txt");
+	}
 
 	// Carga SDL y crea la ventana con su renderizador
 	if (!SDL_Init(SDL_INIT_VIDEO))
@@ -213,11 +220,6 @@ void
 Game::update(float delta)
 {
 	// TODO
-	////Arco
-	//if (bow != nullptr) {
-	//	bow->update(delta);
-	//}
-
 	// Restamos los milisegundos fijos que dura cada frame gracias al SDL_Delay
 	spawnTimer -= FRAME_PERIOD;
 	if (spawnTimer <= 0) {
@@ -225,18 +227,7 @@ Game::update(float delta)
 		spawnTimer = baldelay; // Se reinicia al delay dado 
 	}
 
-	//Flechas
-	//bucle para borrar de forma segura
-	//for (auto it = arrows.begin(); it != arrows.end(); ) {
-	//	if (!(*it)->update(delta)) {
-	//		delete* it;            // Liberamos memoria de la flecha
-	//		it = arrows.erase(it); // La quitamos del vector y avanzamos el iterador
-	//	}
-	//	else {
-	//		++it;
-	//	}
-	//}
-
+	//Updates de cada sceneObject
 	for (auto it = sceneObjects.begin(); it != sceneObjects.end();) {
 		if (!(*it)->update(delta)) {
 			delete* it;
@@ -247,19 +238,19 @@ Game::update(float delta)
 		}
 	}
 
-	//// Globos
-	//for (auto it = balloons.begin(); it != balloons.end(); ) {
-	//	//Muerto En general
-	//	if (!(*it)->update(delta)) {
-	//		delete* it;
-	//		it = balloons.erase(it);
-	//	}
-	//	else {
-	//		++it;
-	//	}
-	//}
 	//Impresion en consola:
+
 	imprimirResult();
+	//Caso sin municion = Derrota
+	if (bow != nullptr && bow->getFlechas() == 0 && numFlechasActivas == 0) {
+		cout << "\nFIN DEL JUEGO. Sin municion." << endl;
+		cout << "Puntuacion final: " << score << " puntos." << endl;
+		exit = true;
+	}
+	// Ver si hay mas niveles, para cambiar
+	else if (goal != 0 && score >= goal) {
+		nextLevel();
+	}
 }
 
 void
@@ -342,25 +333,42 @@ Game::imprimirResult() {
 			cout << "Flechas restantes: " << flechasDisponibles << endl;
 			ultimaCantidadFlechas = flechasDisponibles;
 		}
-
-		// Si ya no quedan flechas en el arco Y todas las flechas disparadas han salido de la pantalla
-		if (flechasDisponibles == 0 && numFlechasActivas ==0) {
-			cout << "\n" << endl;
-			cout << "FIN DEL JUEGO. Sin municion." << endl;
-			cout << "Puntuacion final: " << score << " puntos." << endl;
-
-			exit = true; // Rompe el bucle del Game::run() y cierra el juego limpiamente
-		}
-		// Superar juego en caso de que hay un goal que superar
-		if (goal != 0 && score >= goal) {
-			cout << "\n" << endl;
-			cout << "HAS GANADO. FIN DEL JUEGO" << endl;
-			cout << "Has llegado al goal de " << goal << " puntos" << endl;
-
-			exit = true;
-		}
 	}
 }
+
+void Game::nextLevel() {
+	//Si no existe el nivel siguiente = victoria
+	//si es que tiene el score puesto para un valor, si no, es como nivel infinito
+	//jugar hasta que pierdas
+	currentLevel++;
+	if (!loadLevel(currentLevel)) {
+		cout << "\n" << endl;
+		cout << "HAS GANADO. FIN DEL JUEGO" << endl;
+		cout << "HAS SUPERADO TODOS LOS NIVELES. PUNTUACIÓN: " << goal << " puntos" << endl;
+		exit = true;
+	}
+	//Nuevo nivel
+	else {
+		cout << "\n" << "Nivel: " << currentLevel << endl;
+		score = 0;
+		//Borrar globos,flecha y arco
+		for (SceneObject* obj : sceneObjects) {
+			delete obj;
+		}
+		sceneObjects.clear();
+		bow = nullptr;
+		numFlechasActivas = 0;
+
+		// Reincio marcadores del nivel y flehcas
+		score = 0;
+		ultimaCantidadFlechas = initialArrows;
+		
+		//Nuevo arco
+		bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(BOW_X, BOW_Y), initialArrows, getTexture(BOW), this);
+		sceneObjects.push_back(bow);
+	}
+}
+
 
 void
 Game::imprimirScore() const{

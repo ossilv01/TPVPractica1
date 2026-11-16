@@ -108,7 +108,9 @@ private:
 	void imprimirScore() const;
 
 	//Lectura de archivo
-	void loadLevel();
+	bool loadLevel(int level);
+	int currentLevel = 1; //Se incia en el 1 por el enunciado
+	void nextLevel(); //Preparar el siguiente nivel
 
 	//Limpieza texturas y sdl
 	void clean();
