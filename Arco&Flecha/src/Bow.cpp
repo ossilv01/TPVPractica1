@@ -119,3 +119,14 @@ int Bow::getFlechas() const {
 Point2D<float> Bow::getPosition() const {
 	return dimension.getTopLeftCorner();
 }
+
+void Bow::save(std::ostream& out) const {
+	out << "W ";
+	SceneObject::save(out);
+	out << numArrows << " " << armed << "\n";
+}
+
+void Bow::load(std::istream& in) {
+	SceneObject::load(in);
+	in >> numArrows >> armed;
+}

@@ -19,10 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FileFormatError.cpp" />
-    <ClCompile Include="src\FileNotFoundError.cpp" />
     <ClCompile Include="src\GameError.cpp" />
-    <ClCompile Include="src\SDLError.cpp" />
     <ClCompile Include="src\Butterfly.cpp" />
     <ClCompile Include="src\Arrow.cpp" />
     <ClCompile Include="src\Balloon.cpp" />
@@ -36,10 +33,7 @@
     <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\FileFormatError.h" />
-    <ClInclude Include="src\FileNotFoundError.h" />
     <ClInclude Include="src\GameError.h" />
-    <ClInclude Include="src\SDLError.h" />
     <ClInclude Include="src\Butterfly.h" />
     <ClInclude Include="src\Arrow.h" />
     <ClInclude Include="src\Balloon.h" />

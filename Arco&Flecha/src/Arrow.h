@@ -42,5 +42,9 @@ public:
 
 	void render() const override;
 	bool update(float delta) override;
+
+	//Cargar de saved.txt
+	void save(std::ostream& out) const;
+	void load(std::istream& in);
 };
 

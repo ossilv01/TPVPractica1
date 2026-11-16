@@ -15,5 +15,19 @@ public:
 
 	bool update(float delta) override;
 
+	//override de metodos de sceneobject
+	void save(std::ostream& out) const override {
+		SceneObject::save(out);
+		//Guardamos las coordenadas del vector
+		out << speed.getX() << " " << speed.getY() << " ";
+	}
+	//Cargamos las coordenadas del vector
+	void load(std::istream& in) override {
+		SceneObject::load(in);
+		float vx, vy;
+		in >> vx >> vy;
+		speed = Vector2D<float>(vx, vy);
+	}
+
 };
 

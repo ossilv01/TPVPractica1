@@ -121,3 +121,14 @@ bool Butterfly::hit(const Rectangle& rect) {
 	}
 	return false;
 }
+
+void Butterfly::save(std::ostream& out) const {
+	out << "M ";
+	MobileObject::save(out);
+	out << filaActual << " " << columnaActual << " " << dirTimer << " " << muerta << "\n";
+}
+
+void Butterfly::load(std::istream& in) {
+	MobileObject::load(in);
+	in >> filaActual >> columnaActual >> dirTimer >> muerta;
+}

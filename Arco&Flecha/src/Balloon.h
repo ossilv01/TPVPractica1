@@ -38,6 +38,10 @@ public:
 	bool update(float delta) override;
 	bool hit(const Rectangle& obj) override;
 	//bool getterExplotado() const;
+	
+	//Cargar de saved.txt
+	void save(std::ostream& out) const;
+	void load(std::istream& in);
 
 };
 

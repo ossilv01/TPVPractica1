@@ -303,13 +303,110 @@ Game::run()
 	}
 }
 
+
+void
+Game::saveGame(const std::string& filename) const {
+	std::ofstream out(filename);
+	if (!out.is_open()) {
+		throw GameError("No se pudo crear el archivo de guardado: " + filename);
+	}
+	//Datos globales
+	out << currentLevel << " " << score << " "<< spawnTimer << endl;
+
+	//Guardado de todos los objetos de la escena
+	for (const SceneObject* obj : sceneObjects) {
+		obj->save(out);
+	}
+	out.close();
+}
+
+void 
+Game::loadGame(const std::string& filename) {
+	std::ifstream in(filename);
+	if (!in.is_open()) {
+		throw FileNotFoundError(filename);
+	}
+	//Lectura valores globales
+	int savedLevel, savedScore;
+	float savedTimer;
+	in >> savedLevel >> savedScore >> savedTimer;
+	if (in.fail()) {
+		throw FileFormatError(filename, 1, "Cabecera de partida guardada invalida");
+	}
+	//Cargamos parametros del nivel correspondiente
+	if (!loadLevel(savedLevel)) {
+		throw FileFormatError(filename, 1, "El nivel guardado (" + std::to_string(savedLevel) + ") no existe");
+	}
+	//Limpieza e incializacion
+	for (SceneObject* obj : sceneObjects) {
+		delete obj;
+	}
+	sceneObjects.clear();
+	bow = nullptr;
+	numFlechasActivas = 0;
+
+	currentLevel = savedLevel;
+	score = savedScore;
+	spawnTimer = savedTimer;
+	//Leer cada objeto
+	char tipo;
+	int lineNumber = 1;
+	while (in >> tipo) {
+		lineNumber++;
+		if (tipo == 'W') {
+			bow = new Bow(Vector2D<float>(0, 0), Point2D<float>(0, 0), 0, getTexture(BOW), this);
+			bow->load(in);
+			sceneObjects.push_back(bow);
+			ultimaCantidadFlechas = bow->getFlechas();
+		}
+		else if (tipo == 'A') {
+			Arrow* arrow = new Arrow(Vector2D<float>(0, 0), Point2D<float>(0, 0), getTexture(ARROW), this);
+			arrow->load(in);
+			sceneObjects.push_back(arrow);
+			numFlechasActivas++;
+		}
+		else if (tipo == 'B') {
+			Balloon* balloon = new Balloon(Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BALLOONS), 0, balPoints, this);
+			balloon->load(in);
+			sceneObjects.push_back(balloon);
+		}
+		else if (tipo == 'M') {
+			Butterfly* butterfly = new Butterfly(this, Point2D<float>(0, 0), Vector2D<float>(0, 0), getTexture(BUTTERFLY), butterflyPoints);
+			butterfly->load(in);
+			sceneObjects.push_back(butterfly);
+		}
+		else {
+			throw FileFormatError(filename, lineNumber, std::string("Tipo de objeto desconocido: ") + tipo);
+		}
+		if (in.fail()) {
+			throw FileFormatError(filename, lineNumber, "Datos corruptos o incompletos al cargar objeto");
+		}
+	}
+	in.close();
+}
+
+
 void
 Game::handleEvents()
 {
 	SDL_Event event;
 
 	// Only quit is handled directly, everything else is delegated
+	string path = string(LEVEL_ROOT) + "saved.txt";
 	while (SDL_PollEvent(&event) &&!exit) {
+		if (event.type == SDL_EVENT_KEY_DOWN) {
+			if ((event.key.mod & SDL_KMOD_CTRL) != 0) {
+				if (event.key.key == SDLK_S) {
+					saveGame(path);
+					cout << "Partida guardada en saved.txt" << endl;
+				}
+				else if (event.key.key == SDLK_O) {
+					loadGame(path);
+					cout << "Partida cargada desde saved.txt" << endl;
+				}
+			}
+		}
+
 		if (event.type == SDL_EVENT_QUIT)
 			exit = true;
 		// TODO

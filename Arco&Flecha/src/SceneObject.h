@@ -22,6 +22,21 @@ public:
 	//metodo virtual a overridaear) 
 	//false por defecto, quienes lo utilizan le cambiaran el valor
 	virtual bool hit(const Rectangle& rect) { return false; };
+	
+
+	virtual void save(std::ostream& out) const {
+		Point2D<float> pos = dimension.getTopLeftCorner();
+		//Guardamos la posicion x e y de cada objeto
+		out << pos.getX() << " " << pos.getY() << " ";
+	}
+
+	virtual void load(std::istream& in) {
+		float x, y;
+		in >> x >> y;
+		//Actualiza posicion rectangle segun las coordenadas anteriormente guardadas
+		dimension = Rectangle(Point2D<float>(x, y), dimension.getWidth(), dimension.getHeight());
+	}
+
 };
 
 //EL uso del pragma once sirve porque ocurre lo siguiente

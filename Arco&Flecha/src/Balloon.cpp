@@ -69,3 +69,14 @@ bool Balloon::hit(const Rectangle& obj) {
 	return false;
 }
 
+void Balloon::save(std::ostream& out) const {
+	out << "B ";
+	MobileObject::save(out);
+	out << color << " " << explotado << " " << columnaActual << " " << timerAnimation << "\n";
+}
+
+void Balloon::load(std::istream& in) {
+	MobileObject::load(in);
+	in >> color >> explotado >> columnaActual >> timerAnimation;
+}
+

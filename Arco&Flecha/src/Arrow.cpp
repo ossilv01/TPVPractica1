@@ -47,7 +47,16 @@ bool Arrow::update(float delta) {
 		}
 		globosExplotados++;
 	}
-		
-	
 	return true; 
+}
+
+void Arrow::save(std::ostream& out) const {
+	out << "A ";
+	MobileObject::save(out);
+	out << globosExplotados << "\n";
+}
+
+void Arrow::load(std::istream& in) {
+	MobileObject::load(in);
+	in >> globosExplotados;
 }

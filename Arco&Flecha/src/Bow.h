@@ -48,6 +48,11 @@ public:
 	//Metodos para disparo
 	bool canShoot() const;
 	void Shoot();
+
+	//Cargar de saved.txt
+	void save(std::ostream& out) const;
+	void load(std::istream& in);
+
 	//getter de Point2D
 	Point2D <float> getPosition() const;
 	int setFlechas(int flechas) { return numArrows = flechas; };

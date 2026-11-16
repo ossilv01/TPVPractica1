@@ -129,6 +129,10 @@ private:
 	void clean();
 	void init();
 
+	//Guardado y carga de momento de partida
+	void saveGame(const std::string& filename) const;
+	void loadGame(const std::string& filename);
+
 	//Puntuacion que se actualiza
 	int score = 0;
 
